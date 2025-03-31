@@ -11,7 +11,9 @@ class PatientController extends Controller
      */
     public function index()
     {
-        //
+        // $patients = Patient::with('medecin')->get();
+        // return response()->json($patients);
+        
     }
 
     /**
@@ -19,7 +21,21 @@ class PatientController extends Controller
      */
     public function create()
     {
-        //
+        // $validated = $request->validate([
+        //     'nom' => 'required|string',
+        //     'prenom' => 'required|string',
+        //     'dateNaissance' => 'required|date',
+        //     'sexe' => 'required|string',
+        //     'telephone' => 'required|string',
+        //     'antecedents' => 'nullable|string',
+        //     'traitements' => 'nullable|string',
+        //     'historiqueMedical' => 'nullable|string',
+        //     'medecin_id' => 'required|exists:users,id',
+        // ]);
+
+        // $patient = Patient::create($validated);
+        // return response()->json($patient, 201);
+        
     }
 
     /**
@@ -27,7 +43,7 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -35,7 +51,7 @@ class PatientController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // return response()->json($patient->load(['medecin', 'analyses', 'rapports']));
     }
 
     /**

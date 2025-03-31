@@ -16,8 +16,12 @@ return new class extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->date('dateNaissance');
-            $table->text('historiqueMedical');
-            $table->foreignId('medecin_id')->constrained();
+            $table->string('sexe');
+            $table->string('telephone');
+            $table->text('antecedents')->nullable();
+            $table->text('traitements')->nullable();
+            $table->text('historiqueMedical')->nullable();
+            $table->foreignId('medecin_id')->constrained('users');
             $table->timestamps();
         });
     }
