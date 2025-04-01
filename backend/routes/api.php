@@ -14,9 +14,9 @@ Route::get('/test', function() {
     return response()->json(['message' => 'Test réussi']);
 });
 Route::prefix('patients')->group(function () {
-    Route::get('/liste_patient', [PatientController::class, 'index']); 
-    Route::post('/create_patient', [PatientController::class, 'store']); 
-    Route::get('/{id}', [PatientController::class, 'show']); 
-    Route::put('/{id}', [PatientController::class, 'update']); 
-    Route::delete('/{id}', [PatientController::class, 'destroy']); 
+    Route::get('/liste_patient', [PatientController::class, 'index']);
+    Route::post('/create_patient', [PatientController::class, 'store']);
+    Route::get('/{id}', [PatientController::class, 'show']);
+    Route::put('/{id}', [PatientController::class, 'update']);
+    Route::delete('/{id}', [PatientController::class, 'destroy']);
 });

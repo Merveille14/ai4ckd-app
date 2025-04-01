@@ -2,37 +2,21 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\RouteServiceProvider;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
-class AppServiceProvider extends RouteServiceProvider
+class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Définir les routes de l'application.
      */
-    public function register(): void
-    {
-        //
-    }
+    public function boot(): void{
+        $this->routes(function () {
+            // Définir les routes API
+            Route::middleware('api')->prefix('api')->group(base_path('routes/api.php'));
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot()
-{
-    $this->configureRateLimiting();
-
-    $this->routes(function () {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/api.php'));
-    });
-}
-
-    protected function configureRateLimiting()
-    {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            // Définir les routes Web
+            Route::middleware('web')->group(base_path('routes/web.php'));
         });
     }
 }
