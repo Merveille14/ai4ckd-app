@@ -1,42 +1,90 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+  /* font-family: 'Poppins', sans-serif; */
+  background: linear-gradient(to bottom right, #f5f7fa, #F9FAFC);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.glass-effect {
+  background: rgba(255, 255, 255, 0.01) !important;
+  backdrop-filter: blur(25px) !important;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.glass-sidebar {
+  background: rgba(0, 2, 125, 0.8);
+  backdrop-filter: blur(15px);
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.sidebar-icon {
+  color: white;
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-.card {
-  padding: 2em;
+.sidebar-icon:hover {
+  color: #FF5A00;
+  transform: scale(1.1);
 }
 
-.read-the-docs {
-  color: #888;
+.sidebar-text {
+  display: none;
+  color: white;
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.sidebar-text:hover {
+  color: #FF5A00;
+  transform: scale(1.1);
+}
+
+.sidebar-expanded .sidebar-text {
+  display: inline;
+}
+
+.dot-container {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot.red {
+  background-color: #FF605C;
+}
+
+.dot.yellow {
+  background-color: #FFBD44;
+}
+
+.dot.green {
+  background-color: #00CA4E;
+}
+
+.notification-icon {
+  position: relative;
+}
+
+.notification-icon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background-color: #FF5A00;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.white-box {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
