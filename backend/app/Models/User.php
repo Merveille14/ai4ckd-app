@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -32,6 +33,18 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    // Relation avec les patients (pour les médecins)
+    public function patients()
+    {
+        return $this->hasMany(Patient::class, 'medecin_id');
+    }
+
+    // Relation avec les rapports
+    public function rapports()
+    {
+        return $this->hasMany(Rapport::class, 'medecin_id');
+    }
 
     /**
      * Get the attributes that should be cast.
