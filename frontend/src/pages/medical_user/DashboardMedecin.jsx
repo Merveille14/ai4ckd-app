@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import "../../App.css";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -7,9 +7,7 @@ import SiderbarMedical from '@/components/sidebarMedical';
 const DashboardMedecin = () => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   useEffect(() => {
     if (chartRef.current) {
