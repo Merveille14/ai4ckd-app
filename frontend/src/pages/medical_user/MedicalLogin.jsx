@@ -7,7 +7,7 @@ const MedicalLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/dashboard');
+    navigate('/user_medical/dashboard');
   };
 
   return (

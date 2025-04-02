@@ -1,12 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import "../../App.css";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Home, Users, ClipboardList, BarChart, LogOut, Bell, Mail, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp } from 'lucide-react';
-
 
 const DashboardMedecin = () => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -27,21 +30,17 @@ const DashboardMedecin = () => {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { display: false }
           },
           scales: {
             y: {
               beginAtZero: true,
-              ticks: {
-                font: { size: 14 }
-              }
+              ticks: { font: { size: 14 } }
             },
             x: {
-              ticks: {
-                font: { size: 14 }
-              }
+              ticks: { font: { size: 14 } }
             }
           }
         }
@@ -58,89 +57,86 @@ const DashboardMedecin = () => {
   return (
     <div className="min-h-screen flex font-[Poppins] bg-gradient-to-br from-gray-100 to-gray-50">
       {/* Sidebar */}
-      <div className="absolute left-6 top-4 text-white text-2xl cursor-pointer">
-        <Settings />
-      </div>
+      <aside id="sidebar" className={`fixed top-4 bottom-4  left-4 glass-sidebar flex flex-col justify-between py-4 transition-all duration-300 z-50 ${sidebarOpen ? 'w-60 px-4' : 'w-20 items-center'}`}>
+      <button onClick={toggleSidebar} className="absolute -right-3 top-20 bg-[#9ac441] text-white rounded-full p-1 shadow-lg">
+        {sidebarOpen ? <ChevronLeft /> : <ChevronRight />}
+      </button>
 
-      <aside id="sidebar" className="ml-4 mt-4 mb-4 items-center glass-sidebar flex flex-col justify-between py-2 space-y-2 relative">
-        <button id="toggleSidebar" className="absolute -right-3 top-20 bg-[#9ac441] text-white rounded-full p-1 shadow-lg">
-          <BarChart />
-        </button>
 
-        <div className="flex items-center justify-center space-x-2 px-4">
-          <span className="text-white text-1xl font-bold">AI4CKD</span>
+        <div className="flex items-center justify-center space-x-2 mb-6">
+          <span className="text-white text-xl font-bold">AI4CKD</span>
         </div>
 
-        <nav className="space-y-8 flex flex-col items-start px-4 text-white text-1xl pb-6">
+        <nav className="space-y-8 flex flex-col text-white text-base mb-6">
           <a href="#" className="nav-link flex items-center space-x-3">
             <Home className="sidebar-icon" />
-            <span className="sidebar-text">Accueil</span>
+            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Accueil</span>
           </a>
           <a href="#" className="nav-link flex items-center space-x-3">
             <Users className="sidebar-icon" />
-            <span className="sidebar-text">Patients</span>
+            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Patients</span>
           </a>
           <a href="#" className="nav-link flex items-center space-x-3">
             <BarChart className="sidebar-icon" />
-            <span className="sidebar-text">Suivi</span>
+            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Suivi</span>
           </a>
           <a href="#" className="nav-link flex items-center space-x-3">
             <ClipboardList className="sidebar-icon" />
-            <span className="sidebar-text">Rapports</span>
+            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Rapports</span>
           </a>
         </nav>
 
-        <div className="flex flex-col items-start space-y-6 px-4 pb-6 text-white text-1xl">
+        <div className="flex flex-col space-y-6 text-white text-base">
           <div className="flex items-center space-x-3">
             <LogOut className="sidebar-icon" />
-            <span className="sidebar-text">Déconnexion</span>
+            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Déconnexion</span>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="w-9/12 p-10 space-y-8">
+      <main className="flex-1 ml-20 md:ml-60 p-6 space-y-8 transition-all duration-300">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold">Bonjour, <span id="username">Docteur</span>!</h1>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="white-box p-6 text-center">
-            <p className="text-1xl text-gray-600">Patients Suivis</p>
+            <p className="text-base text-gray-600">Patients Suivis</p>
             <p className="text-2xl font-bold text-[#0c4687]">143</p>
           </div>
           <div className="white-box p-6 text-center">
-            <p className="text-1xl text-gray-600">Alertes Critiques</p>
+            <p className="text-base text-gray-600">Alertes Critiques</p>
             <p className="text-2xl font-bold text-[#0c4687]">7</p>
           </div>
           <div className="white-box p-6 text-center">
-            <p className="text-1xl text-gray-600">Consultations Hebdo</p>
+            <p className="text-base text-gray-600">Consultations Hebdo</p>
             <p className="text-2xl font-bold text-[#0c4687]">32</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="space-y-6 col-span-1">
             <div className="white-box p-6 flex justify-between items-center">
               <div>
-                <p className="text-1xl text-gray-600 mb-4">Patients hospitalisés</p>
+                <p className="text-base text-gray-600 mb-4">Patients hospitalisés</p>
                 <p className="text-5xl font-bold text-[#0c4687]">12</p>
               </div>
               <span className="mt-7 bg-green-100 text-green-600 px-2 py-1 rounded-lg text-sm">+2</span>
             </div>
             <div className="white-box p-6 flex justify-between items-center">
               <div>
-                <p className="mb-4 text-1xl text-gray-600">Examens en attente</p>
+                <p className="mb-4 text-base text-gray-600">Examens en attente</p>
                 <p className="text-5xl font-bold text-[#0c4687]">6</p>
               </div>
               <span className="mt-10 bg-red-100 text-red-600 px-2 py-1 rounded-lg text-sm">-1</span>
             </div>
           </div>
 
-          <div className="white-box p-6 h-[320px] flex flex-col justify-between col-span-2">
+          <div className="white-box p-6 h-[320px] flex flex-col justify-between col-span-2 overflow-hidden">
             <h2 className="text-lg font-semibold text-gray-700">Évolution de la créatinine</h2>
             <div className="flex-1">
-              <canvas ref={chartRef} className="w-full h-full"></canvas>
+              <canvas ref={chartRef} className="w-full h-full" />
             </div>
           </div>
 
@@ -170,7 +166,7 @@ const DashboardMedecin = () => {
             </ul>
           </div>
 
-          <div className="white-box p-6 col-span-3">
+          <div className="white-box p-6 col-span-3 overflow-x-auto">
             <h2 className="text-lg font-semibold">Suivi des traitements</h2>
             <table className="w-full text-left mt-4">
               <thead>
