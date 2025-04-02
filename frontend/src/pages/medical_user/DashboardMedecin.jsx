@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
-import "../App.css";
+import "../../App.css";
 import { Home, Users, ClipboardList, BarChart, LogOut, Bell, Mail, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp } from 'lucide-react';
+
 
 const DashboardMedecin = () => {
   const chartRef = useRef(null);
