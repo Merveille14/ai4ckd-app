@@ -37,16 +37,16 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
+      title: "Accueil",
       url: "#",
       icon: IconDashboard,
-      key:"home"
+      key:"dashboard"
     },
     {
-      title: "Nos médecins",
+      title: "Nos utilisateurs",
       url: "#",
       icon: IconUsers,
-      key:"medecins"
+      key:"User"
     },
   ],
 }
@@ -55,14 +55,14 @@ export function AppSidebar({setSelectedPage,
   ...props
 },  ) {
   return (
-    (<Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
+    (<Sidebar  collapsible="offcanvas" {...props}>
+      <SidebarHeader  >
+        <SidebarMenu >
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">AI4CKD</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

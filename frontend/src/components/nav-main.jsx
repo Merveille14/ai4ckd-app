@@ -21,8 +21,8 @@ export function NavMain({
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
+            <SidebarMenuItem  key={item.title}>
+              <SidebarMenuButton  tooltip={item.title}>
                 {item.icon && <item.icon  />}
                 <span  onClick={() => setSelectedPage(item.key)} >{item.title}</span>
               </SidebarMenuButton>

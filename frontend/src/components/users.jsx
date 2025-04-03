@@ -34,33 +34,50 @@ import {
 const data = [
   {
     id: "m5gr84i9",
-    amount: 316,
     status: "success",
-    email: "ken99@example.com"
+    email: "ken99@example.com",
+    nom:"",
+    prenom:"",
+    rôle:"",
+    mot_de_passe:"",
+
+
   },
   {
     id: "3u1reuv4",
-    amount: 242,
     status: "success",
-    email: "Abe45@example.com"
+    email: "Abe45@example.com",
+    nom:"",
+    prenom:"",
+    rôle:"",
+    mot_de_passe:"",
   },
   {
     id: "derv1ws0",
-    amount: 837,
     status: "processing",
-    email: "Monserrat44@example.com"
+    email: "Monserrat44@example.com",
+    nom:"",
+    prenom:"",
+    rôle:"",
+    mot_de_passe:"",
   },
   {
     id: "5kma53ae",
-    amount: 874,
     status: "success",
-    email: "Silas22@example.com"
+    email: "Silas22@example.com",
+    nom:"",
+    prenom:"",
+    rôle:"",
+    mot_de_passe:"",
   },
   {
     id: "bhqecj4p",
-    amount: 721,
     status: "failed",
-    email: "carmella@example.com"
+    email: "carmella@example.com",
+    nom:"",
+    prenom:"",
+    rôle:"",
+    mot_de_passe:"",
   }
 ]
 
@@ -88,10 +105,17 @@ export const columns = [
     enableHiding: false
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "nom",
+    header: "nom",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("nom")}</div>
+    )
+  },
+  {
+    accessorKey: "prenom",
+    header: "prenom",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("prenom")}</div>
     )
   },
   {
@@ -110,26 +134,23 @@ export const columns = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD"
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    }
+    accessorKey: "rôle",
+    header: "rôle",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("rôle")}</div>
+    )
+  },
+  {
+    accessorKey: "mot_de_passe",
+    header: "mot de passe",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("mot_de_passe")}</div>
+    )
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -140,14 +161,9 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>supprimer</DropdownMenuItem>
+            <DropdownMenuItem>Modifier</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -155,7 +171,7 @@ export const columns = [
   }
 ]
 
-export function Users() {
+export function User() {
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
