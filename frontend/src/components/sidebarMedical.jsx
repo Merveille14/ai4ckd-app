@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Home, Users, ClipboardList, BarChart, LogOut, Bell, Mail, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp } from 'lucide-react';
 export default function SiderbarMedical (){
@@ -17,22 +18,25 @@ export default function SiderbarMedical (){
         </div>
 
         <nav className="space-y-8 flex flex-col text-white text-base mb-6">
-          <a href="#" className="nav-link flex items-center space-x-3">
-            <Home className="sidebar-icon" />
-            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Accueil</span>
-          </a>
-          <a href="#" className="nav-link flex items-center space-x-3">
-            <Users className="sidebar-icon" />
-            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Patients</span>
-          </a>
-          <a href="#" className="nav-link flex items-center space-x-3">
-            <BarChart className="sidebar-icon" />
-            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Suivi</span>
-          </a>
-          <a href="#" className="nav-link flex items-center space-x-3">
-            <ClipboardList className="sidebar-icon" />
-            <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Rapports</span>
-          </a>
+        <Link to="/" className="nav-link flex items-center space-x-3">
+          <Home className="sidebar-icon" />
+          <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Accueil</span>
+        </Link>
+
+        <Link to="/patients" className="nav-link flex items-center space-x-3">
+          <Users className="sidebar-icon" />
+          <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Patients</span>
+        </Link>
+
+        <Link to="/suivi" className="nav-link flex items-center space-x-3">
+          <BarChart className="sidebar-icon" />
+          <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Suivi</span>
+        </Link>
+
+        <Link to="/rapports" className="nav-link flex items-center space-x-3">
+          <ClipboardList className="sidebar-icon" />
+          <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Rapports</span>
+        </Link>
         </nav>
 
         <div className="flex flex-col space-y-6 text-white text-base">

@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import "../../App.css";
 
 const MedicalLogin = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();handleSubmit
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/user_medical/dashboard');
+    navigate('/doctor/dashboard');
   };
 
   return (

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import {
   User, Phone, MapPin, BookOpen, Stethoscope, TestTube,
   ClipboardList, FileText, Download, Mail, Bell, Settings,
@@ -8,43 +10,34 @@ import SidebarMedical from '@/components/sidebarMedical';
 import '../../app.css';
 
 const PatientFile = () => {
-  const patient = {
-    nom: 'John',
-    prenom: 'Doe',
-    sexe: 'Homme',
-    date_naissance: '1988-05-20',
-    adresse: '123 Rue de la Santé, Cotonou',
-    telephone: '+229 91 23 45 67',
-    antecedents: ['Hypertension', 'Diabète de type 2'],
-    traitements: [
-      { nom: 'Médicament A', dosage: '2x/jour', durée: '30 jours' },
-      { nom: 'Médicament B', dosage: '1x/jour', durée: '15 jours' }
-    ],
-    examens: [
-      { date: '2024-03-10', type: 'Créatinine', valeur: '1.8', unité: 'mg/dL' },
-      { date: '2024-03-01', type: 'Urée', valeur: '44', unité: 'mg/dL' }
-    ],
-    consultations: [
-      { date: '2024-03-15', motif: 'Suivi MRC', medecin: 'Dr. Martin' },
-      { date: '2024-02-10', motif: 'Résultats examens', medecin: 'Dr. Thomas' }
-    ],
-    documents: [
-      { nom: 'Analyse sang', type: 'PDF', date: '2024-03-01', lien: '#' },
-      { nom: 'Ordonnance', type: 'PDF', date: '2024-03-10', lien: '#' }
-    ]
-  };
+  const { id } = useParams();
+  const [patient, setPatient] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get(`http://localhost:3000/api/patients/${id}`)
+      .then(res => {
+        setPatient(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [id]);
 
   const calculateAge = (date) => {
     const birth = new Date(date);
     return new Date().getFullYear() - birth.getFullYear();
   };
 
+  if (loading) return <div className="p-6">Chargement...</div>;
+  if (!patient) return <div className="p-6 text-red-500">Patient introuvable.</div>;
+
   return (
     <div className="min-h-screen flex font-[Poppins] bg-gradient-to-br from-gray-100 to-gray-50">
-      {/* Sidebar */}
       <SidebarMedical />
 
-      {/* Main content */}
       <main className="flex-1 ml-20 md:ml-60 p-6 space-y-8 transition-all duration-300">
         <h1 className="text-2xl font-bold text-[#0c4687]">Dossier Patient : {patient.nom} {patient.prenom}</h1>
 
@@ -65,7 +58,7 @@ const PatientFile = () => {
         <div className="white-box p-6 space-y-3">
           <h2 className="text-xl font-semibold flex items-center gap-2"><BookOpen size={20} /> Antécédents médicaux</h2>
           <ul className="list-disc list-inside text-gray-700">
-            {patient.antecedents.map((a, i) => <li key={i}>{a}</li>)}
+            {patient.antecedents?.map((a, i) => <li key={i}>{a}</li>)}
           </ul>
         </div>
 
@@ -73,8 +66,8 @@ const PatientFile = () => {
         <div className="white-box p-6 space-y-3">
           <h2 className="text-xl font-semibold flex items-center gap-2"><Stethoscope size={20} /> Traitements en cours</h2>
           <ul className="text-gray-700">
-            {patient.traitements.map((t, i) => (
-              <li key={i}><strong>{t.nom}</strong> – {t.dosage}, {t.durée}</li>
+            {patient.traitements?.map((t, i) => (
+              <li key={i}><strong>{t.nom}</strong> – {t.dosage}, {t.duree}</li>
             ))}
           </ul>
         </div>
@@ -87,9 +80,9 @@ const PatientFile = () => {
               <tr><th>Date</th><th>Type</th><th>Valeur</th><th>Unité</th></tr>
             </thead>
             <tbody>
-              {patient.examens.map((e, i) => (
+              {patient.examens?.map((e, i) => (
                 <tr key={i} className="border-b text-gray-700 hover:bg-[#9ac441]/10">
-                  <td>{e.date}</td><td>{e.type}</td><td>{e.valeur}</td><td>{e.unité}</td>
+                  <td>{e.date}</td><td>{e.type}</td><td>{e.valeur}</td><td>{e.unite}</td>
                 </tr>
               ))}
             </tbody>
@@ -104,7 +97,7 @@ const PatientFile = () => {
               <tr><th>Date</th><th>Motif</th><th>Médecin</th></tr>
             </thead>
             <tbody>
-              {patient.consultations.map((c, i) => (
+              {patient.consultations?.map((c, i) => (
                 <tr key={i} className="border-b text-gray-700 hover:bg-[#9ac441]/10">
                   <td>{c.date}</td><td>{c.motif}</td><td>{c.medecin}</td>
                 </tr>
@@ -121,7 +114,7 @@ const PatientFile = () => {
               <tr><th>Nom</th><th>Type</th><th>Date</th><th>Télécharger</th></tr>
             </thead>
             <tbody>
-              {patient.documents.map((doc, i) => (
+              {patient.documents?.map((doc, i) => (
                 <tr key={i} className="border-b text-gray-700 hover:bg-[#9ac441]/10">
                   <td>{doc.nom}</td><td>{doc.type}</td><td>{doc.date}</td>
                   <td><a href={doc.lien} target="_blank" rel="noopener noreferrer"><Download size={18} /></a></td>
