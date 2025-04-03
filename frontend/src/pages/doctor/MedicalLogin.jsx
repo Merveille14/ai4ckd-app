@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import "../../App.css";
 
 const MedicalLogin = () => {
-  const navigate = useNavigate();handleSubmit
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
