@@ -1,5 +1,6 @@
 "use client"
 import * as React from "react"
+import { useState,useEffect } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -8,6 +9,16 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -176,6 +187,12 @@ export function User() {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [formData, setFormData] = useState({ nom: "" });
+  const [errors, setErrors] = useState([]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const table = useReactTable({
     data,
@@ -232,6 +249,98 @@ export function User() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Ajouter un compte </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Ajouter un compte</DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="nom" className="text-right">
+                  Nom 
+                </Label>
+                <Input
+                  id="nom"
+                  type="text"
+                  name="nom"
+                  onChange={handleChange}
+                  required
+                  value={formData.nom}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="prenom" className="text-right">
+                  Prénom 
+                </Label>
+                <Input
+                  id="prenom"
+                  type="text"
+                  name="prenom"
+                  onChange={handleChange}
+                  required
+                  value={formData.prenom}
+                  className="col-span-3"
+                />
+               
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="email" className="text-right">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  name="email"
+                  onChange={handleChange}
+                  required
+                  value={formData.email}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="rôle" className="text-right">
+                  Rôle
+                </Label>
+              <select name="id_rôle" onChange={handleChange} value={formData.id_rôle} required className="w-full p-2 border rounded">
+            <option value="">Sélectionnez un rôle</option>
+              <option > admin</option>
+          </select>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="password" className=" w-32">
+                  Mot de passe
+                </Label>
+                <Input
+                  id="Mot de passe "
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                  required
+                  value={formData.password}
+                  className="col-span-3"
+                />
+              </div>
+            </div>
+
+            {/* Affichage des erreurs */}
+            {errors.length > 0 && (
+              <div className="text-red-600">
+                {errors.map((error, index) => (
+                  <p key={index}>{error}</p>
+                ))}
+              </div>
+            )}
+
+            <DialogFooter>
+              <Button type="submit" onClick={''}>Ajouter</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
