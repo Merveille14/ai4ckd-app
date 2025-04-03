@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('first_name'); // Prénom
+            $table->string('last_name'); // Nom
+            $table->string('email')->unique(); // Email unique
+            $table->string('password'); // Mot de passe
+            $table->enum('role', ['doctor', 'nurse', 'admin', 'staff']); // Rôle (ex: docteur, infirmier, admin, personnel)
+            $table->string('phone_number')->nullable(); // Numéro de téléphone
+            $table->string('specialization')->nullable(); // Spécialisation (ex: cardiologie, pédiatrie, etc.)
+            $table->text('address')->nullable(); // Adresse de l'utilisateur
+            $table->boolean('is_active')->default(true); // Si l'utilisateur est actif ou non
+            $table->rememberToken(); // Pour se souvenir de l'utilisateur (facultatif, pour la gestion de session)
             $table->timestamps();
         });
 
