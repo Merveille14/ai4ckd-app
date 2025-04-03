@@ -7,18 +7,19 @@ import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { useState } from "react"
 import data from "./data.json"
-import { Users } from "@/components/users"
+import { User } from "@/components/users"
+import EcommerceMetrics from "@/components/EcommerceMetrics"
 
 export default function Dashboard() {
-  const [selectedPage, setSelectedPage] = useState("medecins");
+  const [selectedPage, setSelectedPage] = useState("dashboard");
   return (
     <SidebarProvider>
       <AppSidebar variant="inset"  setSelectedPage={setSelectedPage} />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col p-10">
-
-              {selectedPage == "medecins" && <Users/> }
+              {selectedPage == "dashboard" && <EcommerceMetrics/> }
+              {selectedPage == "User" && <User/> }
         </div>
       </SidebarInset>
     </SidebarProvider>
