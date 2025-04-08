@@ -17,12 +17,15 @@ return new class extends Migration
             $table->string('prenom');
             $table->date('date_naissance');
             $table->enum('sexe', ['Homme', 'Femme']);
-            $table->string('adresse')->nullable();
-            $table->string('telephone')->nullable();
-            $table->string('email')->nullable(); // Ajout du champ email
+            $table->string('numero_dossier')->unique(); //  nouveau champ
+            $table->date('derniere_consultation')->nullable(); //  nouveau champ
+            // $table->string('adresse')->nullable();
+            // $table->string('telephone')->nullable();
+            // $table->string('email')->nullable();
             $table->foreignId('medecin_id')->constrained('users', 'id')->onDelete('cascade');
             $table->timestamps();
         });
+
     }
 
     /**

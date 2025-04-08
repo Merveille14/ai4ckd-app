@@ -17,10 +17,10 @@ return new class extends Migration
             $table->text('contenu');
             $table->string('chemin_pdf')->nullable();
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
-            $table->foreignId('medecin_id')->constrained('medecins')->onDelete('cascade');
+            $table->foreignId('medecin_id')->constrained('users', 'id')->onDelete('cascade');
             $table->timestamps();
         });
-    
+
     }
 
     /**

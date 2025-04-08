@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Pencil, Trash2, Eye, Search, UserPlus } from "lucide-react";
 import SidebarMedical from "@/components/sidebarMedical";
 import '../../app.css';
-import axios from "axios";
+import api from "@/services/axios";
 
 export default function PatientManage() {
   const navigate = useNavigate();
@@ -17,14 +17,14 @@ export default function PatientManage() {
     numero_dossier: "",
     sexe: "",
     date_naissance: "",
-    medecin: "",
-    derniereConsultation: "",
+    medecin_id: "",
+    derniere_consultation: "",
   });
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/patients")
+    api.get("/patients")
       .then(res => setPatients(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error("Erreur Axios :", err.response?.data || err.message));
   }, []);
 
   const handleEdit = (patient) => {
@@ -34,8 +34,8 @@ export default function PatientManage() {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:3000/api/patients/${id}`);
-    const res = await axios.get("http://localhost:3000/api/patients");
+    await api.delete(`/patients/${id}`);
+    const res = await api.get("/patients");
     setPatients(res.data);
   };
 
@@ -49,14 +49,17 @@ export default function PatientManage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedPatient) {
-      await axios.put(`http://localhost:3000/api/patients/${selectedPatient.id}`, newPatient);
+      await api.put(`/patients/${selectedPatient.id}`, newPatient);
     } else {
-      await axios.post("http://localhost:3000/api/patients", newPatient);
+      await api.post("/patients", newPatient);
     }
-    const res = await axios.get("http://localhost:3000/api/patients");
+    const res = await api.get("/patients");
     setPatients(res.data);
     setIsDialogOpen(false);
     setSelectedPatient(null);
+
+    console.log("Données envoyées :", newPatient);
+
   };
 
   return (
@@ -101,8 +104,8 @@ export default function PatientManage() {
                   <td className="px-4 py-2">{p.numero_dossier}</td>
                   <td className="px-4 py-2">{p.sexe}</td>
                   <td className="px-4 py-2">{calculateAge(p.date_naissance)} ans</td>
-                  <td className="px-4 py-2">{p.medecin}</td>
-                  <td className="px-4 py-2">{p.derniereConsultation}</td>
+                  <td className="px-4 py-2">{p.medecin_id}</td>
+                  <td className="px-4 py-2">{p.derniere_consultation}</td>
                   <td className="px-4 py-2 flex gap-2">
                     <button onClick={() => navigate(`/patient/${p.id}`)} className="text-[#0c4687] hover:underline">
                       <Eye size={18} />
@@ -137,8 +140,8 @@ export default function PatientManage() {
                 <option value="Femme">Femme</option>
               </select>
               <input type="date" value={newPatient.date_naissance} onChange={(e) => setNewPatient({ ...newPatient, date_naissance: e.target.value })} className="w-full border p-2 rounded" required />
-              <input type="text" placeholder="Médecin référent" value={newPatient.medecin} onChange={(e) => setNewPatient({ ...newPatient, medecin: e.target.value })} className="w-full border p-2 rounded" required />
-              <input type="date" value={newPatient.derniereConsultation} onChange={(e) => setNewPatient({ ...newPatient, derniereConsultation: e.target.value })} className="w-full border p-2 rounded" required />
+              <input type="text" placeholder="ID Médecin référent" value={newPatient.medecin_id} onChange={(e) => setNewPatient({ ...newPatient, medecin_id: e.target.value })} className="w-full border p-2 rounded" required />
+              <input type="date" value={newPatient.derniere_consultation} onChange={(e) => setNewPatient({ ...newPatient, derniere_consultation: e.target.value })} className="w-full border p-2 rounded" required />
               <div className="flex justify-between mt-4">
                 <button type="submit" className="bg-[#0c4687] text-white px-4 py-2 rounded">Enregistrer</button>
                 <button type="button" className="bg-gray-300 text-black px-4 py-2 rounded" onClick={() => setIsDialogOpen(false)}>Annuler</button>
