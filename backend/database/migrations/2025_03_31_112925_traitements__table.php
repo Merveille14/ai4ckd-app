@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('traitements', function (Blueprint $table) {
             $table->id();
         $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
-        $table->foreignId('diagnostic_id')->constrained()->onDelete('cascade');
+        // $table->foreignId('diagnostic_id')->constrained()->onDelete('cascade');
+        $table->unsignedBigInteger('diagnostic_id');
         $table->string('nom_medicament'); 
         $table->date('date_prescription'); 
         $table->string('posologie');
