@@ -15,11 +15,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-// Routes publiques 
+// Routes publiques
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Routes protégées 
+// Routes protégées
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'userProfile']);
