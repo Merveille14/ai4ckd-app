@@ -22,7 +22,7 @@ class PatientController extends Controller
     // Détails d'un patient spécifique
     public function getPatientById($id)
     {
-        $patient = Patient::with('medecin', 'consultations') // Relations nécessaires
+        $patient = Patient::with('medecin', 'consultations', 'traitements', 'examens', 'documents')
             ->where('id', $id)
             ->first();
 
