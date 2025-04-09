@@ -69,12 +69,12 @@ export const columns = [
     enableHiding: false
   },
   {
-    accessorKey: "nom",
+    accessorKey: "last_name",
     header: "Nom",
     cell: ({ row }) => <div className="capitalize">{row.getValue("last_name")}</div>
   },
   {
-    accessorKey: "prenom",
+    accessorKey: "first_name",
     header: "Prénom",
     cell: ({ row }) => <div className="capitalize">{row.getValue("first_name")}</div>
   },
@@ -99,7 +99,7 @@ export const columns = [
     accessorKey: "mot_de_passe",
     header: "Mot de passe",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("mot_de_passe")}</div>
+      <div className="capitalize">••••••••</div>
     )
   },
   {
@@ -272,7 +272,9 @@ export function User() {
                     <option value="doctor">Docteur</option>
                     <option value="nurse">Infirmier</option>
                     <option value="admin">Admin</option>
-                    <option value="staff">Personnel</option>
+                    <option value="pharmacist">Pharmatien</option>
+                    <option value="lab_technician">Laboratin</option>
+                    <option value="dietician">Diététicien</option>
                   </select>
                 </div>
               </div>

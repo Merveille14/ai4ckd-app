@@ -9,13 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('patients', function (Blueprint $table) {
-            $table->string('numero_dossier')->unique()->nullable();
-            $table->date('derniere_consultation')->nullable();
-        });
-    }
+    // public function up(): void
+    // {
+    //     Schema::table('patients', function (Blueprint $table) {
+    //         $table->string('numero_dossier')->unique()->nullable();
+    //         $table->date('derniere_consultation')->nullable();
+    //     });
+    // }
 
     /**
      * Reverse the migrations.
