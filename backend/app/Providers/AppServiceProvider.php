@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,7 +19,12 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
+<<<<<<< HEAD
     public function boot(): void{
+=======
+    public function boot(): void
+    {
+>>>>>>> origin/mv
         Schema::defaultStringLength(191);
     }
 }
