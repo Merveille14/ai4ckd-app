@@ -125,6 +125,7 @@ export const columns = [
 ]
 
 export function User() {
+  const [errors, setErrors] = useState([]);
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
@@ -163,6 +164,19 @@ export function User() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setErrors([]);
+
+    if (!formData.first_name || !formData.last_name || !formData.role || !formData.adresse || formData.password.length  < 8 ) {
+      const errors = [];
+      if (!formData.first_name) errors.push("Le prénom est requis");
+      if (!formData.last_name) errors.push("Le nom est requis");
+      if (!formData.role) errors.push("Le rôle est requis");
+      if (formData.password.length  < 8) errors.push("Le mot de passe doit contenir au moins 8 caractères");
+      setErrors(errors);
+      return;
+    }
+   
+    
     try {
       const res = await api.post("/register", formData)
       setFormData({ // Réinitialiser le formulaire après envoi
@@ -241,6 +255,13 @@ export function User() {
             <DialogHeader>
               <DialogTitle>Ajouter un utilisateur</DialogTitle>
               <DialogDescription>Entrez les informations</DialogDescription>
+              {errors.length > 0 && (
+              <div className="text-red-600">
+                {errors.map((error, index) => (
+                  <p key={index}>{error}</p>
+                ))}
+              </div>
+            )}
             </DialogHeader>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4 py-4">
@@ -262,6 +283,7 @@ export function User() {
                       placeholder={label}
                       value={formData[name]}
                       onChange={handleChange}
+                      required
                       className="col-span-3"
                     />
                   </div>
