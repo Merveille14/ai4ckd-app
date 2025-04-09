@@ -13,16 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name'); // Prénom
-            $table->string('last_name'); // Nom
-            $table->string('email')->unique(); // Email unique
-            $table->string('password'); // Mot de passe
-            $table->enum('role', ['doctor', 'nurse', 'admin', 'staff']); // Rôle (ex: docteur, infirmier, admin, personnel)
-            $table->string('phone_number')->nullable(); // Numéro de téléphone
-            $table->string('specialization')->nullable(); // Spécialisation (ex: cardiologie, pédiatrie, etc.)
-            $table->text('address')->nullable(); // Adresse de l'utilisateur
-            $table->boolean('is_active')->default(true); // Si l'utilisateur est actif ou non
-            $table->rememberToken(); // Pour se souvenir de l'utilisateur (facultatif, pour la gestion de session)
+            $table->string('first_name'); // First name
+            $table->string('last_name');  // Last name
+            $table->string('email')->unique(); // Unique email
+            $table->string('password'); // Password
+
+            // Roles: admin (super admin), doctor, nurse, pharmacist, lab_technician, dietician
+            $table->enum('role', ['admin', 'doctor', 'nurse', 'pharmacist', 'lab_technician', 'dietician']);
+
+            $table->string('phone_number')->nullable(); // Phone number
+            $table->string('specialization')->nullable(); // Only used for some roles (doctor, dietician, etc.)
+            $table->text('address')->nullable(); // Address
+            $table->boolean('is_active')->default(true); // Account status
+            $table->rememberToken(); // For session handling
             $table->timestamps();
         });
 

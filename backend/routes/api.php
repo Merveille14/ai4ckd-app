@@ -9,6 +9,7 @@ use App\Http\Controllers\RendezVousController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\RapportController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'userProfile']);
 });
 
-// Route de test pour voir si l'API fonctionne 
+// Route de test pour voir si l'API fonctionne
 Route::get('/test', function () {
     return response()->json(['message' => 'API fonctionne correctement']);
 });
@@ -65,6 +66,13 @@ Route::post('/patients', [PatientController::class, 'storePatient']); // Créer 
 Route::get('/patients/{id}', [PatientController::class, 'getPatientById']); // Afficher un patient spécifique
 Route::put('/patients/{id}', [PatientController::class, 'updatePatient']); // Mettre à jour un patient
 Route::delete('/patients/{id}', [PatientController::class, 'deletePatient']); // Supprimer un patient
+
+//routes pour less users
+Route::post('/register', [UserController::class, 'register']);
+Route::get('/user', [UserController::class, 'index']);
+Route::get('/user/{id}', [UserController::class, 'show']);
+Route::put('/user/{id}', [UserController::class, 'update']);
+Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
