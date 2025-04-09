@@ -2,47 +2,58 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // Champs pouvant être assignés en masse
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'role',           
+        'phone_number',
+        'specialization', 
+        'address',
+        'is_active',      
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // Champs cachés lors de la sérialisation
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    // Définition des relations
+
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Un utilisateur (médecin, infirmier, etc.) peut réaliser plusieurs examens.
      */
-    protected function casts(): array
+    public function examens()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Examen::class, 'medecin_id');
+    }
+
+    /**
+     * Un utilisateur peut réaliser plusieurs consultations.
+     */
+    public function consultations()
+    {
+        return $this->hasMany(Consultation::class, 'medecin_id');
+    }
+
+    /**
+     * Un utilisateur (par exemple, un médecin) reçoit plusieurs notifications.
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'medecin_id');
     }
 }

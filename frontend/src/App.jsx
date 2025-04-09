@@ -1,24 +1,27 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-// Importation des composants/pages
-
-import LoginPage from './pages/admin/login';
+import DashboardMedecin from './pages/doctor/DashboardMedecin';
+import PatientManage from './pages/doctor/PatientManage';
+import PatientFile from './pages/doctor/PatientFile';
+import LoginPage from './pages/auth/login';
 import Dashboard from './pages/admin/dashboard'
+import PatientTable from "./components/PatientTable";
 
 const App = () => {
   return (
     <Router>
      
         <Routes>
-          {/* Définir les routes */}
-       
-          <Route path="/admin/login" element={<LoginPage />} />
+          <Route path="/"  element={<LoginPage />}  />
+          <Route path="/doctor/dashboard" element={<DashboardMedecin/>}/>
+          <Route path="/patients" element={<PatientManage/>}/>
+          <Route path="/patient/:id" element={<PatientFile />} />
           <Route path="/admin/dashboard" element={<Dashboard/>} />
+          <Route  path="/patientsTables" element={<PatientTable />} />
         </Routes>
      
     </Router>
-  );
+  )
 }
 
 export default App;
