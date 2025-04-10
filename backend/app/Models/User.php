@@ -18,15 +18,12 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
-<<<<<<< HEAD
-        'role',
-=======
-        'role',           
+        'role',          
         'phone_number',
         'specialization', 
         'address',
         'is_active',      
->>>>>>> origin/mv
+
     ];
 
     // Champs cachés lors de la sérialisation
@@ -35,7 +32,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-<<<<<<< HEAD
     // Relation avec les patients (pour les médecins)
     public function patients()
     {
@@ -47,15 +43,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rapport::class, 'medecin_id');
     }
-=======
+
     // Définition des relations
->>>>>>> origin/mv
+
+
+    /**
+     * Un utilisateur (médecin, infirmier, etc.) peut réaliser plusieurs examens.
+     */
+
+    // Définition des relations
 
     /**
      * Un utilisateur (médecin, infirmier, etc.) peut réaliser plusieurs examens.
      */
     public function examens()
     {
+
         return $this->hasMany(Examen::class, 'medecin_id');
     }
 

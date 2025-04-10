@@ -2,14 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
 use App\Http\Controllers\Api\PatientController;
-=======
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AlerteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RendezVousController;
-use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\UserController;
@@ -53,13 +50,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/rendez_vous/{id}', [RendezVousController::class, 'update']); // Modifier un rendez-vous
     Route::delete('/rendez_vous/{id}', [RendezVousController::class, 'destroy']); // Supprimer un rendez-vous
 });
->>>>>>> origin/mv
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-<<<<<<< HEAD
 
 // Routes pour les patients
 Route::get('/test', function() {
@@ -72,7 +68,7 @@ Route::prefix('patients')->group(function () {
     Route::put('/{id}', [PatientController::class, 'update']);
     Route::delete('/{id}', [PatientController::class, 'destroy']);
 });
-=======
+
 // Routes pour les tests
 Route::get('/test', function() {
     return response()->json(['message' => 'Test réussi']);
@@ -104,5 +100,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 
-
->>>>>>> origin/mv

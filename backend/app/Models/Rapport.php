@@ -15,12 +15,5 @@ class Rapport extends Model
         return $this->belongsTo(Patient::class);
     }
 
-<<<<<<< HEAD
-    public function medecin()
-    {
-        return $this->belongsTo(User::class, 'medecin_id');
-    }
-=======
     
->>>>>>> origin/mv
 }

@@ -2,15 +2,9 @@
 
 namespace App\Models;
 
-<<<<<<< HEAD
-use Illuminate\Database\Eloquent\Model;
 
-class Alerte extends Model
-{
-    //
-=======
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Http\Controllers\AlerteController;
 
 class Alerte extends Model
@@ -37,5 +31,5 @@ class Alerte extends Model
     {
         return $this->belongsTo(Examen::class);
     }
->>>>>>> origin/mv
+
 }
