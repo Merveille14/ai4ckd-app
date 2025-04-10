@@ -1,15 +1,6 @@
 "use client"
 
 import * as React from "react"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogTrigger
-} from "@/components/ui/dialog"
 import axios from "axios"
 import api from "@/services/axios"
 import { Label } from "@/components/ui/label"
@@ -21,6 +12,15 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 import { Pencil, Trash2, Eye, Search, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -125,6 +125,7 @@ export const columns = [
 ]
 
 export function User() {
+  const [errors, setErrors] = useState([]);
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
@@ -163,6 +164,19 @@ export function User() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setErrors([]);
+
+    if (!formData.first_name || !formData.last_name || !formData.role || !formData.adresse || formData.password.length  < 8 ) {
+      const errors = [];
+      if (!formData.first_name) errors.push("Le prénom est requis");
+      if (!formData.last_name) errors.push("Le nom est requis");
+      if (!formData.role) errors.push("Le rôle est requis");
+      if (!formData.address) errors.push("adresse est requis");
+      if (formData.password.length  < 8) errors.push("Mot de passe de 8 caratères ");
+      setErrors(errors);
+     
+    }
+   
     try {
       const res = await api.post("/register", formData)
       setFormData({ // Réinitialiser le formulaire après envoi
@@ -183,6 +197,7 @@ export function User() {
       console.error("Erreur lors de l'inscription :", error);
       alert("Erreur : " + (error.response?.data?.message || "Inscription échouée"));
     }
+
   };
 
   const table = useReactTable({
@@ -241,6 +256,13 @@ export function User() {
             <DialogHeader>
               <DialogTitle>Ajouter un utilisateur</DialogTitle>
               <DialogDescription>Entrez les informations</DialogDescription>
+              {errors.length > 0 && (
+              <div className="text-red-600">
+                {errors.map((error, index) => (
+                  <p key={index}>{error}</p>
+                ))}
+              </div>
+            )}
             </DialogHeader>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4 py-4">
@@ -262,6 +284,7 @@ export function User() {
                       placeholder={label}
                       value={formData[name]}
                       onChange={handleChange}
+                      required
                       className="col-span-3"
                     />
                   </div>
