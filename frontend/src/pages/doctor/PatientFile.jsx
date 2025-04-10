@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '@/services/axios';
 import {
   User, Phone, MapPin, BookOpen, Stethoscope, TestTube,
   ClipboardList, FileText, Download, Mail, Bell, Settings,
@@ -15,7 +15,7 @@ const PatientFile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/patients/${id}`)
+    api.get(`/patients/details/${id}`)
       .then(res => {
         setPatient(res.data);
         setLoading(false);
@@ -58,7 +58,10 @@ const PatientFile = () => {
         <div className="white-box p-6 space-y-3">
           <h2 className="text-xl font-semibold flex items-center gap-2"><BookOpen size={20} /> Antécédents médicaux</h2>
           <ul className="list-disc list-inside text-gray-700">
-            {patient.antecedents?.map((a, i) => <li key={i}>{a}</li>)}
+            {(typeof patient.antecedents === "string"
+              ? patient.antecedents.split(',')
+              : patient.antecedents || []
+            ).map((a, i) => <li key={i}>{a.trim()}</li>)}
           </ul>
         </div>
 
@@ -66,7 +69,7 @@ const PatientFile = () => {
         <div className="white-box p-6 space-y-3">
           <h2 className="text-xl font-semibold flex items-center gap-2"><Stethoscope size={20} /> Traitements en cours</h2>
           <ul className="text-gray-700">
-            {patient.traitements?.map((t, i) => (
+            {patient.traitements_en_cours?.map((t, i) => (
               <li key={i}><strong>{t.nom}</strong> – {t.dosage}, {t.duree}</li>
             ))}
           </ul>
@@ -80,7 +83,7 @@ const PatientFile = () => {
               <tr><th>Date</th><th>Type</th><th>Valeur</th><th>Unité</th></tr>
             </thead>
             <tbody>
-              {patient.examens?.map((e, i) => (
+              {patient.resultats_examens?.map((e, i) => (
                 <tr key={i} className="border-b text-gray-700 hover:bg-[#9ac441]/10">
                   <td>{e.date}</td><td>{e.type}</td><td>{e.valeur}</td><td>{e.unite}</td>
                 </tr>
@@ -97,9 +100,9 @@ const PatientFile = () => {
               <tr><th>Date</th><th>Motif</th><th>Médecin</th></tr>
             </thead>
             <tbody>
-              {patient.consultations?.map((c, i) => (
+              {patient.historique_consultations?.map((c, i) => (
                 <tr key={i} className="border-b text-gray-700 hover:bg-[#9ac441]/10">
-                  <td>{c.date}</td><td>{c.motif}</td><td>{c.medecin}</td>
+                  <td>{c.date}</td><td>{c.motif}</td><td>{c.medecin?.nom ?? "N/A"}</td>
                 </tr>
               ))}
             </tbody>

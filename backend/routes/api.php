@@ -80,6 +80,8 @@ Route::post('/patients', [PatientController::class, 'storePatient']); // Créer 
 Route::get('/patients/{id}', [PatientController::class, 'getPatientById']); // Afficher un patient spécifique
 Route::put('/patients/{id}', [PatientController::class, 'updatePatient']); // Mettre à jour un patient
 Route::delete('/patients/{id}', [PatientController::class, 'deletePatient']); // Supprimer un patient
+Route::get('/patients/details/{id}', [PatientController::class, 'getPatientDetails']);// afficher les details d'un patient
+
 
 //routes pour less users
 Route::post('/register', [UserController::class, 'register']);

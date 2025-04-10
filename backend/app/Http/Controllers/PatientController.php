@@ -12,17 +12,17 @@ class PatientController extends Controller
     // Liste de tous les patients
     public function getPatientList(Request $request)
     {
-        $patients = Patient::with('medecin') // Relation avec le médecin
-            ->select('id', 'nom', 'prenom', 'date_naissance', 'sexe', 'adresse', 'telephone', 'email', 'numero_dossier', 'derniere_consultation')
-            ->get();
-
+        $patients = Patient::with('medecin')
+        ->select('id', 'nom', 'prenom', 'date_naissance', 'sexe', 'adresse', 'telephone', 'email', 'numero_dossier', 'derniere_consultation', 'medecin_id')
+        ->get();
         return response()->json(['patients' => $patients]);
+
     }
 
     // Détails d'un patient spécifique
     public function getPatientById($id)
     {
-        $patient = Patient::with('medecin', 'consultations') // Relations nécessaires
+        $patient = Patient::with('medecin', 'consultations', 'traitements', 'examens', 'documents')
             ->where('id', $id)
             ->first();
 
@@ -46,24 +46,25 @@ class PatientController extends Controller
             'email' => 'nullable|email|unique:patients,email',
             'numero_dossier' => 'nullable|string|unique:patients,numero_dossier',
             'medecin_id' => 'required|exists:users,id',
-            'antecedents' => 'nullable|string'
+            'antecedents' => 'nullable|string',
+            'derniere_consultation' => 'nullable|date',
         ]);
-    
+
         $patient = Patient::create($validatedData);
-    
+
         return response()->json(['message' => 'Patient created successfully', 'patient' => $patient], 201);
     }
-    
+
 
     // Modifier un patient existant
     public function updatePatient(Request $request, $id)
     {
         $patient = Patient::find($id);
-    
+
         if (!$patient) {
             return response()->json(['message' => 'Patient not found'], 404);
         }
-    
+
         $validatedData = $request->validate([
             'nom' => 'sometimes|string|max:255',
             'prenom' => 'sometimes|string|max:255',
@@ -76,12 +77,12 @@ class PatientController extends Controller
             'medecin_id' => 'sometimes|exists:users,id',
             'antecedents' => 'nullable|string'
         ]);
-    
+
         $patient->update($validatedData);
-    
+
         return response()->json(['message' => 'Patient updated successfully', 'patient' => $patient]);
     }
-    
+
 
     // Supprimer un patient
     public function deletePatient($id)
@@ -101,11 +102,11 @@ class PatientController extends Controller
         $patient = Patient::with(['consultations', 'traitements', 'examens', 'documents'])
             ->where('id', $id)
             ->first();
-    
+
         if (!$patient) {
             return response()->json(['message' => 'Patient not found'], 404);
         }
-    
+
         return response()->json([
             'id' => $patient->id,
             'nom' => $patient->nom,
@@ -123,6 +124,6 @@ class PatientController extends Controller
             'documents' => $patient->documents,
         ]);
     }
-    
+
 
 }
