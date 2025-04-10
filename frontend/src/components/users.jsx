@@ -171,12 +171,12 @@ export function User() {
       if (!formData.first_name) errors.push("Le prénom est requis");
       if (!formData.last_name) errors.push("Le nom est requis");
       if (!formData.role) errors.push("Le rôle est requis");
-      if (formData.password.length  < 8) errors.push("Le mot de passe doit contenir au moins 8 caractères");
+      if (!formData.address) errors.push("adresse est requis");
+      if (formData.password.length  < 8) errors.push("Mot de passe de 8 caratères ");
       setErrors(errors);
-      return;
+     
     }
    
-    
     try {
       const res = await api.post("/register", formData)
       setFormData({ // Réinitialiser le formulaire après envoi
@@ -197,6 +197,7 @@ export function User() {
       console.error("Erreur lors de l'inscription :", error);
       alert("Erreur : " + (error.response?.data?.message || "Inscription échouée"));
     }
+
   };
 
   const table = useReactTable({

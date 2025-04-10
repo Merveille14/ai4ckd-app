@@ -3,16 +3,47 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import api from "@/services/axios"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+
 
 export function LoginForm({
   className,
   ...props
 }) {
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [message,setMessage] = useState('');
+  const navigate =useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try{
+      const response = await api.post('/login',{
+        email,
+        password,
+      });
+      const {user,token} = response.data;
+      // token stocker
+      localStorage.setItem('token',token);
+      if (user.role === 'admin') {
+        navigate('/admin/dashboard'); // Admin redirigé vers dashboard
+      } else {
+        navigate('/doctor/dashboard'); // Autres utilisateurs redirigés vers accueil
+      }
+
+      setMessage(`Bienvenue ${user.first_name} !`);
+    }
+    catch (error) {
+      setMessage(error.response?.data?.message || 'Erreur inconnue');
+    }
+  };
   return (
     (<div className={cn("flex flex-col gap-6 ", className)} {...props}>
       <Card className="overflow-hidden shadow-2xl p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Connexion </h1>
@@ -22,7 +53,12 @@ export function LoginForm({
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" required />
+                <Input id="email" 
+                type="email"  
+                value={email}
+                onChange={(e) => setEmail(e.target.value)} 
+                placeholder="m@example.com" 
+                required />
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
@@ -31,13 +67,18 @@ export function LoginForm({
                     mot de passe oublié?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required />
               </div>
               <Button type="submit" className="w-full mb-20">
               se connecter
               </Button>
             </div>
           </form>
+          {message && <p>{message}</p>}
           <div className="bg-muted relative hidden md:block">
             <img
               src="https://i.pinimg.com/736x/2e/6e/c8/2e6ec814459231d305e89bd315a7ae74.jpg"
