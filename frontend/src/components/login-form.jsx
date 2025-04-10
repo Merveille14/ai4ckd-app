@@ -27,10 +27,11 @@ export function LoginForm({
       const {user,token} = response.data;
       // token stocker
       localStorage.setItem('token',token);
+      console.log("token")
       if (user.role === 'admin') {
         navigate('/admin/dashboard'); // Admin redirigé vers dashboard
       } else {
-        navigate('/doctor/dashboard'); // Autres utilisateurs redirigés vers accueil
+        navigate('/doctor/dashboard');
       }
 
       setMessage(`Bienvenue ${user.first_name} !`);
