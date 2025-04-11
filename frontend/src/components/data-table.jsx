@@ -518,7 +518,7 @@ export function DataTable({
                 className="hidden h-8 w-8 p-0 lg:flex"
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}>
-                <span className="sr-only">Go to first page</span>
+                <span className="sr-only">Première page</span>
                 <IconChevronsLeft />
               </Button>
               <Button
@@ -527,7 +527,7 @@ export function DataTable({
                 size="icon"
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}>
-                <span className="sr-only">Go to previous page</span>
+                <span className="sr-only">Page précédente</span>
                 <IconChevronLeft />
               </Button>
               <Button
@@ -536,7 +536,7 @@ export function DataTable({
                 size="icon"
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}>
-                <span className="sr-only">Go to next page</span>
+                <span className="sr-only">Page suivante</span>
                 <IconChevronRight />
               </Button>
               <Button
@@ -545,7 +545,7 @@ export function DataTable({
                 size="icon"
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}>
-                <span className="sr-only">Go to last page</span>
+                <span className="sr-only">Page précédente</span>
                 <IconChevronsRight />
               </Button>
             </div>

@@ -1,38 +1,71 @@
 <?php
 
 namespace App\Models;
-use App\Models\Patient;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Document;
+
 
 class Patient extends Model
 {
-    protected $table = 'patients';
+    use HasFactory;
+
     protected $fillable = [
-        'nom', 'prenom', 'dateNaissance', 'sexe', 'telephone', 
-        'antecedents', 'traitements', 'historiqueMedical', 'medecin_id'
+        'nom', 'prenom', 'date_naissance', 'sexe', 'adresse', 'telephone',
+        'email', 'numero_dossier', 'medecin_id', 'derniere_consultation', 'antecedents'
     ];
 
-    // Relation avec le médecin
+
+    /**
+     * Un patient peut avoir plusieurs consultations.
+     */
+    public function consultation()
+    {
+        return $this->hasMany(Consultation::class);
+    }
+
+    /**
+     * Un patient peut avoir plusieurs traitements.
+     */
+    public function traitements()
+    {
+        return $this->hasMany(Traitement::class);
+    }
+
+    /**
+     * Un patient peut avoir plusieurs diagnostics.
+     */
+    public function diagnostics()
+    {
+        return $this->hasMany(Diagnostic::class);
+    }
+
     public function medecin()
-    {
-        return $this->belongsTo(User::class, 'medecin_id');
-    }
+{
+    return $this->belongsTo(User::class, 'medecin_id');
+}
 
-    // Relation avec les analyses
-    public function analyses()
-    {
-        return $this->hasMany(Analyse::class);
-    }
 
-    // Relation avec les rapports
-    public function rapports()
-    {
-        return $this->hasMany(Rapport::class);
-    }
+public function consultations()
+{
+    return $this->hasMany(Consultation::class, 'patient_id');
+}
 
-    // Relation avec les alertes
-    public function alertes()
-    {
-        return $this->hasMany(Alerte::class);
-    }
+public function rapports()
+{
+    return $this->hasMany(Rapport::class, 'patient_id');
+}
+ //Un patient peut avoir plusieurs examens
+public function examens()
+{
+    return $this->hasMany(Examen::class, 'patient_id');
+}
+
+public function documents()
+{
+    return $this->hasMany(Document::class, 'patient_id');
+}
+
+
 }

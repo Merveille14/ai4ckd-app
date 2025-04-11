@@ -2,60 +2,58 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // Champs pouvant être assignés en masse
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
-        'role',
+        'role',           
+        'phone_number',
+        'specialization', 
+        'address',
+        'is_active',      
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // Champs cachés lors de la sérialisation
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // Relation avec les patients (pour les médecins)
-    public function patients()
-    {
-        return $this->hasMany(Patient::class, 'medecin_id');
-    }
+    // Définition des relations
 
-    // Relation avec les rapports
-    public function rapports()
+    /**
+     * Un utilisateur (médecin, infirmier, etc.) peut réaliser plusieurs examens.
+     */
+    public function examens()
     {
-        return $this->hasMany(Rapport::class, 'medecin_id');
+        return $this->hasMany(Examen::class, 'medecin_id');
     }
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Un utilisateur peut réaliser plusieurs consultations.
      */
-    protected function casts(): array
+    public function consultations()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Consultation::class, 'medecin_id');
+    }
+
+    /**
+     * Un utilisateur (par exemple, un médecin) reçoit plusieurs notifications.
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'medecin_id');
     }
 }
