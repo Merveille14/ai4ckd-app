@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -9,6 +10,10 @@ use App\Http\Controllers\RendezVousController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\RapportController;
+use App\Http\Controllers\WorkflowController;
+use App\Http\Controllers\PDFController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
@@ -85,6 +90,41 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/patients/{id}/examens', [ExamenController::class, 'getExamData']);
 });
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/workflows', [WorkflowController::class, 'index']); // Liste des workflows
+    Route::post('/workflows', [WorkflowController::class, 'store']); // Créer un workflow
+    Route::get('/workflows/{id}', [WorkflowController::class, 'show']); // Détails d'un workflow
+    Route::put('/workflows/{id}', [WorkflowController::class, 'update']); // Modifier un workflow
+    Route::delete('/workflows/{id}', [WorkflowController::class, 'destroy']); // Supprimer un workflow
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/patients/{id}/pdf', [PDFController::class, 'generatePatientPDF']);
+});
+
+Route::post('/notifications/workflow-etape/{id}', [NotificationController::class, 'sendWorkflowReminder']);
+
+Route::post('/setup-roles-permissions', [AdminController::class, 'setupRolesAndPermissions']);
+
+Route::post('/users/{id}/assign-role', [UserController::class, 'assignRole']);
+
+
+Route::get('/users/{id}/permissions', [UserController::class, 'getUserPermissions']);
+
+
+
+
+
+
+Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
+    Route::post('/users/{id}/assign-role', [UserController::class, 'assignRole']);
+    Route::post('/users/{id}/revoke-role', [UserController::class, 'revokeRole']);
+});
+
+
 
 
 
