@@ -25,7 +25,15 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+<<<<<<< HEAD
+Route::get('scribe/docs', function () {
+    return view('docs'); 
+});
+
+// Routes protégées 
+=======
 // Routes protégées
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'userProfile']);
