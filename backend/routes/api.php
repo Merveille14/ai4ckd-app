@@ -68,6 +68,15 @@ Route::put('/patients/{id}', [PatientController::class, 'updatePatient']); // Me
 Route::delete('/patients/{id}', [PatientController::class, 'deletePatient']); // Supprimer un patient
 Route::get('/patients/details/{id}', [PatientController::class, 'getPatientDetails']);// afficher les details d'un patient
 
+//// Routes d'examen pour chaque patient
+Route::get('/examens/pending', [ExamenController::class, 'pending']);
+Route::prefix('patients/{patient}/examens')->group(function () {
+    Route::get('/', [ExamenController::class, 'index']); // Liste
+    Route::post('/', [ExamenController::class, 'store']); // Création
+});
+Route::post('/examens/{id}/validate', [ExamenController::class, 'updateResult']); // Mise à jour des résultats
+Route::delete('/examens/{id}', [ExamenController::class, 'destroy']); // Suppression
+
 
 //routes pour less users
 Route::post('/register', [UserController::class, 'register']);

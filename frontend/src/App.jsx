@@ -6,6 +6,7 @@ import PatientFile from './pages/doctor/PatientFile';
 import LoginPage from './pages/auth/login';
 import Dashboard from './pages/admin/dashboard'
 import PatientTable from "./components/PatientTable";
+import DashboardLaborantin from "./pages/laborantin/DashbardLaborantin";
 
 const App = () => {
   return (
@@ -13,10 +14,11 @@ const App = () => {
      
         <Routes>
           <Route path="/"  element={<LoginPage />}  />
-          <Route path="/doctor/dashboard" element={<DashboardMedecin/>}/>
+          <Route path="/dashboard/doctor" element={<DashboardMedecin/>}/>
+          <Route path="/dashboard/laborantin" element={<DashboardLaborantin/>}/>
           <Route path="/patients" element={<PatientManage/>}/>
           <Route path="/patient/:id" element={<PatientFile />} />
-          <Route path="/admin/dashboard" element={<Dashboard/>} />
+          <Route path="/dashboard/admin" element={<Dashboard/>} />
           <Route  path="/patientsTables" element={<PatientTable />} />
         </Routes>
      

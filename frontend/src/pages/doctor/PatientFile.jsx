@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ExamRequestModal from '@/components/ExamRequestModal';
 import api from '@/services/axios';
 import {
   User, Phone, MapPin, BookOpen, Stethoscope, TestTube,
@@ -18,6 +19,8 @@ const PatientFile = () => {
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
   const [workflow, setWorkflow] = useState([]);
+  const [isExamModalOpen, setIsExamModalOpen] = useState(false);
+
 
   useEffect(() => {
     api.get(`/patients/details/${id}`)
@@ -119,21 +122,45 @@ const PatientFile = () => {
         </div>
 
         {/* Examens */}
-        <div className="white-box p-6 space-y-3 overflow-x-auto">
-          <h2 className="text-xl font-semibold flex items-center gap-2"><TestTube size={20} /> Résultats d’examens</h2>
-          <table className="w-full text-sm mt-2">
-            <thead className="text-left text-[#0c4687] border-b">
-              <tr><th>Date</th><th>Type</th><th>Valeur</th><th>Unité</th></tr>
-            </thead>
-            <tbody>
-              {patient.resultats_examens?.map((e, i) => (
-                <tr key={i} className="border-b text-gray-700 hover:bg-[#9ac441]/10">
-                  <td>{e.date}</td><td>{e.type}</td><td>{e.valeur}</td><td>{e.unite}</td>
+        <div className="white-box p-6 space-y-4 overflow-x-auto">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              <TestTube size={20} /> Examens
+            </h2>
+            <button
+              onClick={() => setIsExamModalOpen(true)}
+              className="text-sm text-[#0c4687] hover:underline"
+            >
+              Demander un examen
+            </button>
+          </div>
+
+          {patient.resultats_examens?.length > 0 ? (
+            <table className="w-full text-sm mt-2">
+              <thead className="text-left text-[#0c4687] border-b">
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Valeur</th>
+                  <th>Unité</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {patient.resultats_examens.map((e, i) => (
+                  <tr key={i} className="border-b text-gray-700 hover:bg-[#9ac441]/10">
+                    <td>{e.date}</td>
+                    <td>{e.type}</td>
+                    <td>{e.valeur}</td>
+                    <td>{e.unite}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-sm text-gray-500 italic">Aucun examen enregistré.</p>
+          )}
         </div>
+
 
         {/* Consultations */}
         <div className="white-box p-6 space-y-3 overflow-x-auto">
@@ -169,6 +196,20 @@ const PatientFile = () => {
             </tbody>
           </table>
         </div>
+        {isExamModalOpen && (
+          <ExamRequestModal
+            onClose={() => setIsExamModalOpen(false)}
+            patientId={id}
+            onExamAdded={() => {
+              setIsExamModalOpen(false);
+              // recharger les examens
+              api.get(`/patients/details/${id}`)
+                .then(res => setPatient(res.data))
+                .catch(err => console.error(err));
+            }}
+          />
+        )}
+
       </main>
 
       {/* Colonne droite */}
