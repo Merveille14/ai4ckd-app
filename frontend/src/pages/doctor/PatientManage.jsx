@@ -1,11 +1,21 @@
+//PatientManage
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil, Trash2, Eye, Search, UserPlus } from "lucide-react";
+<<<<<<< HEAD
 // import SidebarMedical from "@/components/sidebarMedical";
 import '../../app.css';
 import axios from "axios";
+=======
+import SidebarMedical from "@/components/sidebarMedical";
+import '@/App.css';
+import api from "@/services/axios";
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
 
 export default function PatientManage() {
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); 
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [patients, setPatients] = useState([]);
@@ -19,11 +29,15 @@ export default function PatientManage() {
     numero_dossier: "",
     sexe: "",
     date_naissance: "",
-    medecin: "",
-    derniereConsultation: "",
+    adresse: "",
+    telephone: "",
+    email: "",
+    medecin_id: "",
+    derniere_consultation: "",
   });
 
   useEffect(() => {
+<<<<<<< HEAD
     const fetchPatients = async () => {
       try {
         setLoading(true);
@@ -39,6 +53,14 @@ export default function PatientManage() {
     };
 
     fetchPatients();
+=======
+    api.get("/patients")
+      .then(res => {
+        console.log(" Patients API response:", res.data);
+        setPatients(res.data.patients)
+  })
+      .catch(err => console.error("Erreur Axios :", err.response?.data || err.message));
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
   }, []);
 
   const handleEdit = (patient) => {
@@ -48,6 +70,7 @@ export default function PatientManage() {
   };
 
   const handleDelete = async (id) => {
+<<<<<<< HEAD
     try {
       await axios.delete(`http://localhost:3000/api/patients/${id}`);
       const res = await axios.get("http://localhost:3000/api/patients");
@@ -56,6 +79,11 @@ export default function PatientManage() {
       console.error("Erreur de suppression:", err);
       setError("Échec de la suppression");
     }
+=======
+    await api.delete(`/patients/${id}`);
+    const res = await api.get("/patients");
+    setPatients(res.data.patients);
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
   };
 
   const calculateAge = (birthDate) => {
@@ -72,10 +100,12 @@ export default function PatientManage() {
     return age;
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (selectedPatient) {
+<<<<<<< HEAD
         await axios.put(`http://localhost:3000/api/patients/${selectedPatient.id}`, newPatient);
       } else {
         await axios.post("http://localhost:3000/api/patients", newPatient);
@@ -88,8 +118,43 @@ export default function PatientManage() {
       console.error("Erreur d'enregistrement:", err);
       setError("Échec de l'enregistrement");
     }
+=======
+        await api.put(`/patients/${selectedPatient.id}`, newPatient);
+        setMessage("Patient mis à jour avec succès.");
+        setMessageType("success");
+      } else {
+        await api.post("/patients", newPatient);
+        setMessage("Patient ajouté avec succès.");
+        setMessageType("success");
+      }
+  
+      const res = await api.get("/patients");
+      setPatients(res.data.patients);
+      setIsDialogOpen(false);
+      setSelectedPatient(null);
+    } catch (error) {
+      setMessage(
+          error.response?.data?.message === "The given data was invalid."
+            ? Object.values(error.response?.data?.errors || {})
+                .flat()
+                .join(", ")
+            : "Erreur lors de l'enregistrement. Réessaie."
+        );
+ 
+      setMessageType("error");
+      console.error("Erreur:", error.response?.data || error.message);
+    }
+  
+    // Effacer le message après 5 secondes
+    setTimeout(() => {
+      setMessage("");
+      setMessageType("");
+    }, 5000);
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
   };
+  
 
+<<<<<<< HEAD
   const filteredPatients = patients.filter(p => 
     `${p.nom} ${p.prenom}`.toLowerCase().includes(search.toLowerCase())
   );
@@ -99,6 +164,91 @@ export default function PatientManage() {
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0c4687]"></div>
+=======
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-50 p-10 font-[Poppins]">
+      <SidebarMedical />
+
+      {message && (
+        <div className={`p-3 mb-4 rounded text-sm font-medium ${
+          messageType === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          {message}
+        </div>
+      )}
+
+      <div className="glass-effect p-6 rounded-2xl ml-20 md:ml-60 space-y-8 transition-all duration-300">
+        <div className="flex justify-between items-center mb-6">
+          <div className="relative w-1/2">
+            <Search className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" size={18} />
+            <input type="text" placeholder="Rechercher un patient..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-10 p-3 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#0c4687]" />
+          </div>
+          <button className="bg-[#9ac441] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#7fa637]" onClick={() => {
+            setIsDialogOpen(true);
+            setNewPatient({
+              nom: "",
+              prenom: "",
+              numero_dossier: "",
+              sexe: "",
+              date_naissance: "",
+              adresse: "",
+              telephone: "",
+              email: "",
+              medecin_id: "",
+              derniere_consultation: "",
+            });
+            setSelectedPatient(null);
+          }}>
+            <UserPlus size={18} /><span>Ajouter un patient</span>
+          </button>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left border border-gray-200 bg-white rounded-xl">
+            <thead className="bg-[#0c4687] text-white">
+              <tr>
+                <th className="px-4 py-2">Nom</th>
+                <th className="px-4 py-2">Prénom</th>
+                <th className="px-4 py-2">N° Dossier</th>
+                <th className="px-4 py-2">Sexe</th>
+                <th className="px-4 py-2">Âge</th>
+                <th className="px-4 py-2">Adresse</th>
+                <th className="px-4 py-2">Téléphone</th>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Médecin</th>
+                <th className="px-4 py-2">Dernière consultation</th>
+                <th className="px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(patients) && patients.filter(p => p.nom.toLowerCase().includes(search.toLowerCase())).map((p) => (
+                <tr key={p.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-2">{p.nom}</td>
+                  <td className="px-4 py-2">{p.prenom}</td>
+                  <td className="px-4 py-2">{p.numero_dossier}</td>
+                  <td className="px-4 py-2">{p.sexe}</td>
+                  <td className="px-4 py-2">{calculateAge(p.date_naissance)} ans</td>
+                  <td className="px-4 py-2">{p.adresse}</td>
+                  <td className="px-4 py-2">{p.telephone}</td>
+                  <td className="px-4 py-2">{p.email}</td>
+                  <td className="px-4 py-2">{p.medecin_id}</td>
+                  <td className="px-4 py-2">{p.derniere_consultation}</td>
+                  <td className="px-4 py-2 flex gap-2">
+                    <button onClick={() => navigate(`/patient/${p.id}`)} className="text-[#0c4687] hover:underline">
+                      <Eye size={18} />
+                    </button>
+                    <button onClick={() => handleEdit(p)} className="text-yellow-500">
+                      <Pencil size={18} />
+                    </button>
+                    <button onClick={() => handleDelete(p.id)} className="text-red-500">
+                      <Trash2 size={18} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
         </div>
       ) : error ? (
         <div className="text-center py-10 text-red-500">
@@ -205,6 +355,7 @@ export default function PatientManage() {
       )}
 
       {isDialogOpen && (
+<<<<<<< HEAD
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
             <div className="p-6">
@@ -308,6 +459,33 @@ export default function PatientManage() {
                 </div>
               </form>
             </div>
+=======
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.40)] flex items-center justify-center z-50">
+          <div className="white-box p-6 space-y-4 w-[500px]">
+            <h2 className="text-xl font-semibold">
+              {selectedPatient ? "Modifier un patient" : "Ajouter un patient"}
+            </h2>
+            <form className="space-y-3" onSubmit={handleSubmit}>
+              <input type="text" placeholder="Nom" value={newPatient.nom} onChange={(e) => setNewPatient({ ...newPatient, nom: e.target.value })} className="w-full border p-2 rounded" required />
+              <input type="text" placeholder="Prénom" value={newPatient.prenom} onChange={(e) => setNewPatient({ ...newPatient, prenom: e.target.value })} className="w-full border p-2 rounded" required />
+              <input type="text" placeholder="N° Dossier" value={newPatient.numero_dossier} onChange={(e) => setNewPatient({ ...newPatient, numero_dossier: e.target.value })} className="w-full border p-2 rounded" required />
+              <select value={newPatient.sexe} onChange={(e) => setNewPatient({ ...newPatient, sexe: e.target.value })} className="w-full border p-2 rounded" required>
+                <option value="">-- Sexe --</option>
+                <option value="Homme">Homme</option>
+                <option value="Femme">Femme</option>
+              </select>
+              <input type="date" value={newPatient.date_naissance} onChange={(e) => setNewPatient({ ...newPatient, date_naissance: e.target.value })} className="w-full border p-2 rounded" required />
+              <input type="text" placeholder="Adresse" value={newPatient.adresse} onChange={(e) => setNewPatient({ ...newPatient, adresse: e.target.value })} className="w-full border p-2 rounded" />
+              <input type="text" placeholder="Téléphone" value={newPatient.telephone} onChange={(e) => setNewPatient({ ...newPatient, telephone: e.target.value })} className="w-full border p-2 rounded" />
+              <input type="email" placeholder="Email" value={newPatient.email} onChange={(e) => setNewPatient({ ...newPatient, email: e.target.value })} className="w-full border p-2 rounded" />
+              <input type="text" placeholder="ID Médecin référent" value={newPatient.medecin_id} onChange={(e) => setNewPatient({ ...newPatient, medecin_id: e.target.value })} className="w-full border p-2 rounded" required />
+              <input type="date" value={newPatient.derniere_consultation} onChange={(e) => setNewPatient({ ...newPatient, derniere_consultation: e.target.value })} className="w-full border p-2 rounded" />
+              <div className="flex justify-between mt-4">
+                <button type="submit" className="bg-[#0c4687] text-white px-4 py-2 rounded">Enregistrer</button>
+                <button type="button" className="bg-gray-300 text-black px-4 py-2 rounded" onClick={() => setIsDialogOpen(false)}>Annuler</button>
+              </div>
+            </form>
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
           </div>
         </div>
       )}

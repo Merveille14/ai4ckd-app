@@ -17,6 +17,8 @@ class Examen extends Model
         'date',
         'medecin_id',
         'resultats',
+        'status',
+        'note',
     ];
 
     public function patient()

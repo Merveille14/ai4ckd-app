@@ -20,6 +20,7 @@ class AuthController extends Controller
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
+                
                 'role' => 'required|in:doctor,nurse,admin,staff',
                 'phone_number' => 'nullable|string|max:20',
                 'specialization' => 'nullable|string|max:255',

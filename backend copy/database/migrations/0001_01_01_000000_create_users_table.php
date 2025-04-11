@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+<<<<<<< HEAD:backend/database/migrations/0001_01_01_000000_create_users_table.php
             $table->string('first_name'); 
             $table->string('last_name'); 
             $table->string('email')->unique();
@@ -23,6 +24,13 @@ return new class extends Migration
             $table->text('address')->nullable(); 
             $table->boolean('is_active')->default(true);
             $table->rememberToken(); 
+=======
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25:backend copy/database/migrations/0001_01_01_000000_create_users_table.php
             $table->timestamps();
         });
 

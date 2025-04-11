@@ -1,12 +1,12 @@
 // ✅ Version dynamique de DashboardMedecin.jsx avec données API
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
-import axios from 'axios';
+import api from "@/services/axios";
 import { 
   Mail, Bell, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp 
 } from 'lucide-react';
 import SiderbarMedical from '@/components/sidebarMedical';
-import '../../App.css';
+import '@/App.css';
 
 const DashboardMedecin = () => {
   const chartRef = useRef(null);
@@ -14,7 +14,7 @@ const DashboardMedecin = () => {
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/dashboard/doctor')
+    api.get("/dashboard")
       .then(res => setDashboardData(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -50,7 +50,7 @@ const DashboardMedecin = () => {
     }
   }, [dashboardData]);
 
-  if (!dashboardData) return <div className="p-6">Chargement du tableau de bord...</div>;
+ 
 
   return (
     <div className="min-h-screen flex font-[Poppins] bg-gradient-to-br from-gray-100 to-gray-50">

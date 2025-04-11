@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('date');
             $table->foreignId('medecin_id')->constrained('users')->onDelete('cascade');
             $table->text('resultats')->nullable();
+            $table->string('status')->default('en_attente');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

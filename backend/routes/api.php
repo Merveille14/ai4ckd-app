@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -9,27 +10,36 @@ use App\Http\Controllers\RendezVousController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\RapportController;
+use App\Http\Controllers\WorkflowController;
+use App\Http\Controllers\PDFController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 
-// Routes publiques 
+// Routes publiques
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+<<<<<<< HEAD
 Route::get('scribe/docs', function () {
     return view('docs'); 
 });
 
 // Routes protégées 
+=======
+// Routes protégées
+>>>>>>> 7958a2e79c411366e35bffa9cfde90d37d9f1b25
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'userProfile']);
 });
 
-// Route de test pour voir si l'API fonctionne 
+// Route de test pour voir si l'API fonctionne
 Route::get('/test', function () {
     return response()->json(['message' => 'API fonctionne correctement']);
 });
@@ -69,6 +79,26 @@ Route::post('/patients', [PatientController::class, 'storePatient']); // Créer 
 Route::get('/patients/{id}', [PatientController::class, 'getPatientById']); // Afficher un patient spécifique
 Route::put('/patients/{id}', [PatientController::class, 'updatePatient']); // Mettre à jour un patient
 Route::delete('/patients/{id}', [PatientController::class, 'deletePatient']); // Supprimer un patient
+Route::get('/patients/details/{id}', [PatientController::class, 'getPatientDetails']);// afficher les details d'un patient
+
+//// Routes d'examen pour chaque patient
+Route::get('/examens/pending', [ExamenController::class, 'pending']);
+Route::prefix('patients/{patient}/examens')->group(function () {
+    Route::get('/', [ExamenController::class, 'index']); // Liste
+    Route::post('/', [ExamenController::class, 'store']); // Création
+});
+Route::post('/examens/{id}/validate', [ExamenController::class, 'updateResult']); // Mise à jour des résultats
+Route::delete('/examens/{id}', [ExamenController::class, 'destroy']); // Suppression
+
+
+//routes pour less users
+Route::post('/register', [UserController::class, 'register']);
+Route::get('/user', [UserController::class, 'index']);
+Route::get('/users/count', [UserController::class, 'count']);
+Route::get('/users/count-by-role', [UserController::class, 'countByRole']);
+Route::get('/user/{id}', [UserController::class, 'show']);
+Route::put('/user/{id}', [UserController::class, 'update']);
+Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -79,6 +109,41 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/patients/{id}/examens', [ExamenController::class, 'getExamData']);
 });
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/workflows', [WorkflowController::class, 'index']); // Liste des workflows
+    Route::post('/workflows', [WorkflowController::class, 'store']); // Créer un workflow
+    Route::get('/workflows/{id}', [WorkflowController::class, 'show']); // Détails d'un workflow
+    Route::put('/workflows/{id}', [WorkflowController::class, 'update']); // Modifier un workflow
+    Route::delete('/workflows/{id}', [WorkflowController::class, 'destroy']); // Supprimer un workflow
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/patients/{id}/pdf', [PDFController::class, 'generatePatientPDF']);
+});
+
+Route::post('/notifications/workflow-etape/{id}', [NotificationController::class, 'sendWorkflowReminder']);
+
+Route::post('/setup-roles-permissions', [AdminController::class, 'setupRolesAndPermissions']);
+
+Route::post('/users/{id}/assign-role', [UserController::class, 'assignRole']);
+
+
+Route::get('/users/{id}/permissions', [UserController::class, 'getUserPermissions']);
+
+
+
+
+
+
+Route::middleware(['auth:sanctum', 'role:Super Admin'])->group(function () {
+    Route::post('/users/{id}/assign-role', [UserController::class, 'assignRole']);
+    Route::post('/users/{id}/revoke-role', [UserController::class, 'revokeRole']);
+});
+
+
 
 
 
