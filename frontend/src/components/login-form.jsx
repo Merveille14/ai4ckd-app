@@ -30,12 +30,12 @@ export function LoginForm({
       console.log("token")
       if (user.role === 'admin' || user.role === 'doctor' ||   user.role === 'lab_technician'  ) {
        navigate('/admin/dashboard');
-      } else if (user.role === 'doctor') {
+      } else if  (user.role === 'doctor') {
         navigate('/doctor/dashboard')
-      }else if (user.role === 'doctor') {
-        navigate('/doctor/dashboard')
+      }else if (user.role === 'lab_technician') {
+        navigate('/dashboard/laborantin')
       }
-      ;s
+      ;
 
       setMessage(`Bienvenue ${user.first_name} !`);
     }
