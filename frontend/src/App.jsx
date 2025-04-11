@@ -7,6 +7,7 @@ import LoginPage from './pages/auth/login';
 import Dashboard from './pages/admin/dashboard'
 import PatientTable from "./components/PatientTable";
 import PrivateRoute from './components/PrivateRoute';
+import DashboardLaborantin from './pages/laborantin/DashbardLaborantin';
 
 const App = () => {
   return (

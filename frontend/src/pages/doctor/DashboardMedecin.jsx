@@ -50,7 +50,7 @@ const DashboardMedecin = () => {
     }
   }, [dashboardData]);
 
-  if (!dashboardData) return <div className="p-6">Chargement du tableau de bord...</div>;
+ 
 
   return (
     <div className="min-h-screen flex font-[Poppins] bg-gradient-to-br from-gray-100 to-gray-50">
