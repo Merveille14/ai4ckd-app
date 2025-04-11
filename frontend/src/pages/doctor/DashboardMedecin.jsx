@@ -6,7 +6,7 @@ import {
   Mail, Bell, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp 
 } from 'lucide-react';
 import SiderbarMedical from '@/components/sidebarMedical';
-import '../../App.css';
+import '@/app.css';
 
 const DashboardMedecin = () => {
   const chartRef = useRef(null);

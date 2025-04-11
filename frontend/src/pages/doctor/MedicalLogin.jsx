@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../../App.css";
+import '@/app.css';
 
 const MedicalLogin = () => {
   const navigate = useNavigate();
