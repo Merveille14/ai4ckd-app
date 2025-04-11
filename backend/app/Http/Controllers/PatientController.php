@@ -122,7 +122,7 @@ class PatientController extends Controller
             'antecedents' => $patient->antecedents, // Texte des antécédents médicaux
             'historique_consultations' => $patient->consultations,
             'traitements_en_cours' => $patient->traitements,
-            'resultats_examens' => $patient->examens,
+            'resultats_examens' => $patient->examens->where('status', 'validé')->values(),
             'documents' => $patient->documents,
         ]);
     }

@@ -46,8 +46,8 @@ export default function WorkflowPatientModal({ onClose, patientId, onWorkflowSav
 
       setTimeout(() => {
         setMessage('');
-        onWorkflowSaved(); // ⏳ Rafraîchit le suivi
-        onClose();         // ⛔ Ferme le popup
+        onWorkflowSaved(); // Rafraîchit le suivi
+        onClose();         // Ferme le popup
       }, 1500);
     } catch (error) {
       console.error("Erreur workflow:", error);
