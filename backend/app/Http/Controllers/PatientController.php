@@ -15,7 +15,9 @@ class PatientController extends Controller
         $patients = Patient::with('medecin')
         ->select('id', 'nom', 'prenom', 'date_naissance', 'sexe', 'adresse', 'telephone', 'email', 'numero_dossier', 'derniere_consultation', 'medecin_id')
         ->get();
-        return response()->json(['patients' => $patients]);
+        return response()->json(['patients' => $patients,
+                                'total' => $patients->count()]);
+        
 
     }
 

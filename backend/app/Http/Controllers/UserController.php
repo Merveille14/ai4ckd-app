@@ -120,4 +120,20 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Utilisateur supprimé avec succès']);
     }
+    // Compter tous les utilisateurs
+public function count()
+{
+    $count = User::count();
+    return response()->json(['total' => $count]);
+}
+
+public function countByRole()
+{
+    $counts = User::selectRaw('role, COUNT(*) as total')
+                  ->groupBy('role')
+                  ->get();
+
+    return response()->json($counts);
+}
+
 }

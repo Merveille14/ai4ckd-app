@@ -77,6 +77,8 @@ Route::get('/patients/details/{id}', [PatientController::class, 'getPatientDetai
 //routes pour less users
 Route::post('/register', [UserController::class, 'register']);
 Route::get('/user', [UserController::class, 'index']);
+Route::get('/users/count', [UserController::class, 'count']);
+Route::get('/users/count-by-role', [UserController::class, 'countByRole']);
 Route::get('/user/{id}', [UserController::class, 'show']);
 Route::put('/user/{id}', [UserController::class, 'update']);
 Route::delete('/user/{id}', [UserController::class, 'destroy']);

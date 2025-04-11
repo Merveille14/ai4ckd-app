@@ -28,8 +28,10 @@ export function LoginForm({
       // token stocker
       localStorage.setItem('token',token);
       console.log("token")
-      if (user.role === 'admin') {
-        navigate('/admin/dashboard'); // Admin redirigé vers dashboard
+      if (user.role === 'admin' || user.role === 'doctor' ||   user.role === 'lab_technician'  ) {
+        if ( user.role === 'admin' ) {navigate('/admin/dashboard')};
+        if (user.role === 'doctor' ) {navigate('/doctor/dashboard')};
+        if (user.role === 'lab_technician' ) {navigate('/lab_technician/dashboard')};  // Admin redirigé vers dashboard
       } else {
         navigate('/doctor/dashboard');
       }
