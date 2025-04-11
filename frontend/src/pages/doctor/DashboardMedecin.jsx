@@ -1,7 +1,7 @@
 // ✅ Version dynamique de DashboardMedecin.jsx avec données API
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
-import axios from 'axios';
+import api from "@/services/axios";
 import { 
   Mail, Bell, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp 
 } from 'lucide-react';
@@ -14,7 +14,7 @@ const DashboardMedecin = () => {
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/dashboard/doctor')
+    api.get("/dashboard")
       .then(res => setDashboardData(res.data))
       .catch(err => console.error(err));
   }, []);

@@ -4,16 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Document;
+
 
 class Patient extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nom', 'prenom', 'date_naissance', 'sexe', 'adresse', 'telephone', 
+        'nom', 'prenom', 'date_naissance', 'sexe', 'adresse', 'telephone',
         'email', 'numero_dossier', 'medecin_id', 'derniere_consultation', 'antecedents'
     ];
-    
+
 
     /**
      * Un patient peut avoir plusieurs consultations.
@@ -38,7 +40,7 @@ class Patient extends Model
     {
         return $this->hasMany(Diagnostic::class);
     }
-    
+
     public function medecin()
 {
     return $this->belongsTo(User::class, 'medecin_id');
@@ -59,5 +61,11 @@ public function examens()
 {
     return $this->hasMany(Examen::class, 'patient_id');
 }
+
+public function documents()
+{
+    return $this->hasMany(Document::class, 'patient_id');
+}
+
 
 }
