@@ -35,13 +35,13 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/test', function () {
     return response()->json(['message' => 'API fonctionne correctement']);
 });
-Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index']); // Données du dashboard
     Route::get('/dashboard/patients', [DashboardController::class, 'countPatients']); // Nombre total de patients
     Route::get('/dashboard/alerts', [DashboardController::class, 'criticalAlerts']); // Alertes critiques
     Route::get('/dashboard/rendez_vous', [DashboardController::class, 'upcomingRendezVous']); // Prochains rendez-vous
     Route::get('/dashboard/evolution', [DashboardController::class, 'evolutionGraph']); // Graphique d’évolution
-});
+
 
 Route::get('/alerts', [AlerteController::class, 'index']);
 Route::post('/alerts', [AlerteController::class, 'store']);
