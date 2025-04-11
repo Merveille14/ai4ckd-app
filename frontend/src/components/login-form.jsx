@@ -29,12 +29,13 @@ export function LoginForm({
       localStorage.setItem('token',token);
       console.log("token")
       if (user.role === 'admin' || user.role === 'doctor' ||   user.role === 'lab_technician'  ) {
-        if ( user.role === 'admin' ) {navigate('/admin/dashboard')};
-        if (user.role === 'doctor' ) {navigate('/doctor/dashboard')};
-        if (user.role === 'lab_technician' ) {navigate('/lab_technician/dashboard')};  // Admin redirigé vers dashboard
-      } else {
-        navigate('/doctor/dashboard');
+       navigate('/admin/dashboard');
+      } else if (user.role === 'doctor') {
+        navigate('/doctor/dashboard')
+      }else if (user.role === 'doctor') {
+        navigate('/doctor/dashboard')
       }
+      ;s
 
       setMessage(`Bienvenue ${user.first_name} !`);
     }
