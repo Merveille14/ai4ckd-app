@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil, Trash2, Eye, Search, UserPlus } from "lucide-react";
 import SidebarMedical from "@/components/sidebarMedical";
-import '@/app.css';
+import '@/App.css';
 import api from "@/services/axios";
 
 export default function PatientManage() {
