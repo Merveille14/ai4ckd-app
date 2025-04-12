@@ -127,13 +127,27 @@ public function count()
     return response()->json(['total' => $count]);
 }
 
-public function countByRole()
+public function countUsersByRole()
 {
-    $counts = User::selectRaw('role, COUNT(*) as total')
-                  ->groupBy('role')
-                  ->get();
+    $roles = ['admin', 'doctor', 'nurse', 'pharmacist', 'lab_technician', 'dietician'];
 
-    return response()->json($counts);
+    $counts = User::selectRaw('role, COUNT(*) as total')
+        ->groupBy('role')
+        ->pluck('total', 'role')
+        ->toArray();
+
+    // Ajouter les rôles manquants avec 0
+    foreach ($roles as $role) {
+        if (!isset($counts[$role])) {
+            $counts[$role] = 0;
+        }
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $counts
+    ]);
 }
+
 
 }

@@ -1,34 +1,42 @@
-// ✅ Version dynamique de DashboardMedecin.jsx avec données API
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import api from "@/services/axios";
-import { 
-  Mail, Bell, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp 
-} from 'lucide-react';
+import { Mail, Bell, Settings, CheckCircle, Clock, UserCheck, AlertTriangle, TrendingUp } from 'lucide-react';
 import SiderbarMedical from '@/components/sidebarMedical';
-import '@/App.css';
+import '../../App.css';
 
 const DashboardMedecin = () => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
   const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true); // Ajout de l'état de chargement
 
   useEffect(() => {
     api.get("/dashboard")
-      .then(res => setDashboardData(res.data))
-      .catch(err => console.error(err));
+      .then(res => {
+        setDashboardData(res.data.data);
+        setLoading(false); // Une fois les données récupérées, on arrête le chargement
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false); // On arrête aussi le chargement en cas d'erreur
+      });
   }, []);
 
   useEffect(() => {
-    if (chartRef.current && dashboardData?.creatinineChart) {
+    if (chartRef.current && dashboardData?.consultationsParMois) {
       if (chartInstance.current) chartInstance.current.destroy();
+
+      const moisLabels = dashboardData.consultationsParMois.map(item => `Mois ${item.mois}`);
+      const consultations = dashboardData.consultationsParMois.map(item => item.total);
+
       chartInstance.current = new Chart(chartRef.current, {
         type: 'line',
         data: {
-          labels: dashboardData.creatinineChart.labels,
+          labels: moisLabels,
           datasets: [{
-            label: "Évolution de la créatinine",
-            data: dashboardData.creatinineChart.values,
+            label: "Consultations par mois",
+            data: consultations,
             borderColor: '#0c4687',
             backgroundColor: 'rgba(12, 70, 135, 0.2)',
             borderWidth: 3,
@@ -50,7 +58,9 @@ const DashboardMedecin = () => {
     }
   }, [dashboardData]);
 
- 
+  if (loading) {
+    return <div>Chargement...</div>; // Affiche un message ou un spinner pendant le chargement
+  }
 
   return (
     <div className="min-h-screen flex font-[Poppins] bg-gradient-to-br from-gray-100 to-gray-50">
@@ -61,77 +71,44 @@ const DashboardMedecin = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="white-box p-6 text-center">
             <p className="text-base text-gray-600">Patients Suivis</p>
-            <p className="text-2xl font-bold text-[#0c4687]">{dashboardData.patientsSuivis}</p>
+            <p className="text-2xl font-bold text-[#0c4687]">{dashboardData.totalPatients}</p>
           </div>
           <div className="white-box p-6 text-center">
             <p className="text-base text-gray-600">Alertes Critiques</p>
-            <p className="text-2xl font-bold text-[#0c4687]">{dashboardData.alertes}</p>
+            <p className="text-2xl font-bold text-[#0c4687]">{dashboardData.alertesCritiques}</p>
           </div>
           <div className="white-box p-6 text-center">
-            <p className="text-base text-gray-600">Consultations Hebdo</p>
-            <p className="text-2xl font-bold text-[#0c4687]">{dashboardData.consultationsHebdo}</p>
+            <p className="text-base text-gray-600">Consultations ce mois</p>
+            <p className="text-2xl font-bold text-[#0c4687]">
+              {dashboardData.consultationsParMois?.reduce((sum, c) => sum + c.total, 0)}
+            </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="space-y-6 col-span-1">
-            <div className="white-box p-6 flex justify-between items-center">
-              <div>
-                <p className="text-base text-gray-600 mb-4">Patients hospitalisés</p>
-                <p className="text-5xl font-bold text-[#0c4687]">{dashboardData.hospitalises}</p>
-              </div>
-              <span className="mt-7 bg-green-100 text-green-600 px-2 py-1 rounded-lg text-sm">+{dashboardData.hospitalisesVariation}</span>
-            </div>
-            <div className="white-box p-6 flex justify-between items-center">
-              <div>
-                <p className="mb-4 text-base text-gray-600">Examens en attente</p>
-                <p className="text-5xl font-bold text-[#0c4687]">{dashboardData.examensAttente}</p>
-              </div>
-              <span className="mt-10 bg-red-100 text-red-600 px-2 py-1 rounded-lg text-sm">{dashboardData.examensVariation}</span>
-            </div>
-          </div>
-
-          <div className="white-box p-6 h-[320px] flex flex-col justify-between col-span-2 overflow-hidden">
-            <h2 className="text-lg font-semibold text-gray-700">Évolution de la créatinine</h2>
+          <div className="white-box p-6 h-[320px] flex flex-col justify-between col-span-3 overflow-hidden">
+            <h2 className="text-lg font-semibold text-gray-700">Évolution des consultations</h2>
             <div className="flex-1">
               <canvas ref={chartRef} className="w-full h-full" />
             </div>
           </div>
 
-          <div className="glass-effect p-6 col-span-3">
-            <h2 className="text-xl font-semibold mb-4">Actions médicales récentes</h2>
-            <ul className="divide-y divide-gray-200">
-              {dashboardData.actionsRecents.map((action, i) => (
-                <li key={i} className="py-4 flex justify-between items-center">
-                  <div className="flex items-center space-x-4">
-                    <img src={action.avatar} alt={action.nom} className="rounded-full w-10 h-10" />
-                    <div>
-                      <p className="font-semibold">{action.nom}</p>
-                      <p className="text-sm text-gray-500">{action.description}</p>
-                    </div>
-                  </div>
-                  <span className="text-sm text-gray-400">{action.heure}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           <div className="white-box p-6 col-span-3 overflow-x-auto">
-            <h2 className="text-lg font-semibold">Suivi des traitements</h2>
+            <h2 className="text-lg font-semibold">Prochains rendez-vous</h2>
             <table className="w-full text-left mt-4">
               <thead>
                 <tr className="border-b">
-                  <th className="pb-2">Nom</th>
-                  <th className="pb-2">Traitement</th>
-                  <th className="pb-2">Observations</th>
+                  <th className="pb-2">Patient</th>
+                  <th className="pb-2">Date</th>
+                  <th className="pb-2">Heure</th>
                 </tr>
               </thead>
               <tbody>
-                {dashboardData.traitements.map((row, i) => (
+                {dashboardData.prochainsRendezVous.map((rdv, i) => (
                   <tr key={i} className="border-b">
-                    <td>{row.nom}</td>
-                    <td>{row.traitement}</td>
-                    <td>{row.observation}</td>
+                    <td>{rdv.patient?.nom ?? 'N/A'}</td> {/* Assurez-vous que votre modèle RendezVous a une relation avec Patient */}
+                    <td>{new Date(rdv.date_rendezvous).toLocaleDateString()}</td>
+                    <td>{new Date(rdv.date_rendezvous).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
                   </tr>
                 ))}
               </tbody>

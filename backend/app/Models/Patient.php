@@ -66,6 +66,10 @@ public function documents()
 {
     return $this->hasMany(Document::class, 'patient_id');
 }
+public function workflows()
+{
+    return $this->hasMany(Workflow::class);
+}
 
 
 }

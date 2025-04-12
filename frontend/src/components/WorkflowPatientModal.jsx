@@ -40,22 +40,48 @@ export default function WorkflowPatientModal({ onClose, patientId, onWorkflowSav
 
   const handleSubmit = async () => {
     try {
-      await api.post(`/patients/${patientId}/workflow`, workflow); // <- 🔥 à adapter selon backend
-      setMessage("Workflow enregistré !");
-      setMessageType("success");
-
-      setTimeout(() => {
-        setMessage('');
-        onWorkflowSaved(); // Rafraîchit le suivi
-        onClose();         // Ferme le popup
-      }, 1500);
+      const etapesFormatBackend = workflow.steps.map((step, index) => ({
+        type: step.title,
+        date_prevue: new Date().toISOString().split('T')[0],
+        frequence: null,
+        ordre: index + 1
+      }));
+  
+      const response = await api.post(`/patients/${patientId}/workflows`, {
+        nom: workflow.title,
+        description: workflow.description,
+        etapes: etapesFormatBackend
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+  
+      // Vérification explicite de la réponse
+      if (response.status >= 200 && response.status < 300) {
+        setMessage("Workflow enregistré !");
+        setMessageType("success");
+        
+        setTimeout(() => {
+          onWorkflowSaved(); // Rafraîchir les données
+          onClose(); // Fermer le modal
+        }, 1500);
+      } else {
+        throw new Error(`Réponse inattendue: ${response.status}`);
+      }
     } catch (error) {
-      console.error("Erreur workflow:", error);
-      setMessage("Erreur lors de l'enregistrement.");
+      console.error("Erreur détaillée:", {
+        error: error.response?.data || error.message,
+        config: error.config
+      });
+      
+      setMessage(error.response?.data?.message || 
+                error.message || 
+                "Erreur lors de l'enregistrement");
       setMessageType("error");
     }
   };
-
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.40)] z-50 flex items-center justify-center p-4">
       <div className="bg-white p-6 rounded-xl max-w-md w-full space-y-4 relative shadow-lg">

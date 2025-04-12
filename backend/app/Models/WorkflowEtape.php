@@ -1,18 +1,17 @@
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
+// app/Models/WorkflowEtape.php
 class WorkflowEtape extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['workflow_id', 'type', 'date_prev', 'frequence', 'statut'];
+    protected $fillable = [
+        'type', 
+        'date_prevue', 
+        'frequence', 
+        'statut',
+        'ordre',
+        'workflow_id'
+    ];
 
     public function workflow()
     {
-        return $this->belongsTo(Workflow::class, 'workflow_id');
+        return $this->belongsTo(Workflow::class);
     }
 }
