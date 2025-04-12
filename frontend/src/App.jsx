@@ -21,6 +21,7 @@ const App = () => {
           <Route path="/patient/:id" element={<PatientFile />} />
           <Route path="/admin/dashboard" element={<Dashboard/>} />
           <Route  path="/patientsTables" element={<PatientTable />} />
+          <Route path="/patients" element={<PatientManage />} />
         </Routes>
      
     </Router>

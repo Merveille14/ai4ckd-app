@@ -191,6 +191,7 @@ export function User() {
         address: ""
       });
       setOpen(false);
+      fetchUsers();
       console.log("role envoyé :", res.data);
       alert("Utilisateur créé avec succès !")
     } catch (error) {
@@ -291,9 +292,10 @@ export function User() {
                 ))}
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="role" className="text-right">Rôle</Label>
-                  <select name="role" value={formData.role} onChange={handleChange} className="col-span-3">
+                  <select name="role" value={formData.role} onChange={handleChange} placeholder="-- sélectionner un rôle --" className="col-span-3">
+                  <option value="">-- sélectionner un rôle --</option>
+                  <option value="nurse">Infirmier</option>
                     <option value="doctor">Docteur</option>
-                    <option value="nurse">Infirmier</option>
                     <option value="admin">Admin</option>
                     <option value="pharmacist">Pharmatien</option>
                     <option value="lab_technician">Laboratin</option>

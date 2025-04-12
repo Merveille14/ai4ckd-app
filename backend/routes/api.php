@@ -25,7 +25,11 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Routes protégées
+Route::get('scribe/docs', function () {
+    return view('docs'); 
+});
+
+// Routes protégées 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'userProfile']);
@@ -35,26 +39,26 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/test', function () {
     return response()->json(['message' => 'API fonctionne correctement']);
 });
-Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index']); // Données du dashboard
     Route::get('/dashboard/patients', [DashboardController::class, 'countPatients']); // Nombre total de patients
     Route::get('/dashboard/alerts', [DashboardController::class, 'criticalAlerts']); // Alertes critiques
     Route::get('/dashboard/rendez_vous', [DashboardController::class, 'upcomingRendezVous']); // Prochains rendez-vous
     Route::get('/dashboard/evolution', [DashboardController::class, 'evolutionGraph']); // Graphique d’évolution
-});
+
 
 Route::get('/alerts', [AlerteController::class, 'index']);
 Route::post('/alerts', [AlerteController::class, 'store']);
 Route::put('/alerts/{id}', [AlerteController::class, 'update']);
 Route::delete('/alerts/{id}', [AlerteController::class, 'destroy']);
 
-Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('/rendez_vous', [RendezVousController::class, 'index']); // Lister les rendez-vous
     Route::post('/rendez_vous', [RendezVousController::class, 'store']); // Créer un rendez-vous
     Route::get('/rendez_vous/{id}', [RendezVousController::class, 'show']); // Voir un rendez-vous spécifique
     Route::put('/rendez_vous/{id}', [RendezVousController::class, 'update']); // Modifier un rendez-vous
     Route::delete('/rendez_vous/{id}', [RendezVousController::class, 'destroy']); // Supprimer un rendez-vous
-});
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -87,34 +91,34 @@ Route::delete('/examens/{id}', [ExamenController::class, 'destroy']); // Suppres
 Route::post('/register', [UserController::class, 'register']);
 Route::get('/user', [UserController::class, 'index']);
 Route::get('/users/count', [UserController::class, 'count']);
-Route::get('/users/count-by-role', [UserController::class, 'countByRole']);
+Route::get('/users/count-by-role', [UserController::class, 'countUsersByRole']);
 Route::get('/user/{id}', [UserController::class, 'show']);
 Route::put('/user/{id}', [UserController::class, 'update']);
 Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+
     Route::get('/patients/{id}/details', [PatientController::class, 'getPatientDetails']);
-});
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+
+
     Route::get('/patients/{id}/examens', [ExamenController::class, 'getExamData']);
-});
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/workflows', [WorkflowController::class, 'index']); // Liste des workflows
-    Route::post('/workflows', [WorkflowController::class, 'store']); // Créer un workflow
-    Route::get('/workflows/{id}', [WorkflowController::class, 'show']); // Détails d'un workflow
-    Route::put('/workflows/{id}', [WorkflowController::class, 'update']); // Modifier un workflow
-    Route::delete('/workflows/{id}', [WorkflowController::class, 'destroy']); // Supprimer un workflow
-});
+
+    Route::prefix('patients/{patientId}')->group(function () {
+        Route::get('workflows', [WorkflowController::class, 'index']);
+        Route::post('workflows', [WorkflowController::class, 'store']); // POST /api/patients/1/workflows
+        Route::get('workflows/{workflow}', [WorkflowController::class, 'show']);
+        Route::put('workflows/{workflow}', [WorkflowController::class, 'update']);
+        Route::delete('workflows/{workflow}', [WorkflowController::class, 'destroy']);
+    });
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+
     Route::get('/patients/{id}/pdf', [PDFController::class, 'generatePatientPDF']);
-});
+
 
 Route::post('/notifications/workflow-etape/{id}', [NotificationController::class, 'sendWorkflowReminder']);
 

@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { TrendingUp } from "lucide-react";
-import { Label, Pie, PieChart } from "recharts";
+import React, { useEffect, useMemo, useState } from "react";
+import { Pie, PieChart, Label } from "recharts";
 import {
   Card,
   CardContent,
@@ -16,25 +15,37 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import axios from "axios";
 
-const chartData = [
-  { browser: "Médecins", visitors: 275, fill: "var(--primary)" },
-  { browser: "infirmiers", visitors: 200, fill: "green" },
-  { browser: "Aides", visitors: 287, fill:"yellow" },
-
-];
-
-const chartConfig = {
-  visitors: { label: "Visitors" },
-  chrome: { label: "Chrome", color: "hsl(var(--chart-1))" },
-  infirmiers: { label: "infirmiers", color: "hsl(var(--chart-2))" },
-  Aides: { label: "Aides", color: "hsl(var(--chart-3))" },
+const COLORS = {
+  doctor: "var(--primary)",
+  nurse: "green",
+  dietician: "orange",
+  admin: "blue",
+  pharmacist: "purple",
+  lab_technician: "teal",
 };
 
 export default function Mychart() {
-  const totalVisitors = useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/users/count-by-role")
+      .then(res => {
+        const roles = res.data.data;
+        const transformed = Object.keys(roles).map((role) => ({
+          role,
+          count: roles[role],
+          fill: COLORS[role] || "gray",
+        }));
+        setChartData(transformed);
+      })
+      .catch(err => console.error("Erreur lors de la récupération des données :", err));
   }, []);
+
+  const totalUsers = useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.count, 0);
+  }, [chartData]);
 
   return (
     <Card className="flex flex-col">
@@ -43,20 +54,31 @@ export default function Mychart() {
         <CardDescription>Classement par rôle</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
+        <ChartContainer className="mx-auto aspect-square max-h-[250px]">
           <PieChart>
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="visitors" nameKey="browser" innerRadius={60} strokeWidth={5}>
+            <Pie
+              data={chartData}
+              dataKey="count"
+              nameKey="role"
+              innerRadius={60}
+              strokeWidth={5}
+            >
               <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
-                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
                         <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
-                          {totalVisitors.toLocaleString()}
+                          {totalUsers}
                         </tspan>
                         <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
-                         Comptes
+                          Comptes
                         </tspan>
                       </text>
                     );
@@ -68,9 +90,8 @@ export default function Mychart() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-
         <div className="leading-none text-muted-foreground">
-         Médecins - Infirmiers - Aides soignants 
+          {chartData.map((item) => item.role).join(" - ")}
         </div>
       </CardFooter>
     </Card>

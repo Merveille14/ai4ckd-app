@@ -9,7 +9,7 @@ import {
   Workflow
 } from 'lucide-react';
 import SidebarMedical from '@/components/sidebarMedical';
-import '../../app.css';
+import '@/App.css';
 import WorkflowPatientModal from "@/components/WorkflowPatientModal"; // à créer ou déplacer
 
 

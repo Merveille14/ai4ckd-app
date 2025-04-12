@@ -13,12 +13,10 @@ class PatientController extends Controller
     public function getPatientList(Request $request)
     {
         $patients = Patient::with('medecin')
-        ->select('id', 'nom', 'prenom', 'date_naissance', 'sexe', 'adresse', 'telephone', 'email', 'numero_dossier', 'derniere_consultation', 'medecin_id')
+        ->select('id', 'nom', 'prenom', 'date_naissance', 'sexe', 'numero_dossier', 'derniere_consultation', 'medecin_id')
         ->get();
         return response()->json(['patients' => $patients,
                                 'total' => $patients->count()]);
-        
-
     }
 
     // Détails d'un patient spécifique
@@ -85,7 +83,11 @@ class PatientController extends Controller
         return response()->json(['message' => 'Patient updated successfully', 'patient' => $patient]);
     }
 
-
+    public function show($id)
+    {
+        $patient = Patient::with(['workflows.etapes'])->find($id);
+        // ...
+    }
     // Supprimer un patient
     public function deletePatient($id)
     {

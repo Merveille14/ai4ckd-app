@@ -18,7 +18,7 @@ export default function SiderbarMedical (){
         </div>
 
         <nav className="space-y-8 flex flex-col text-white text-base mb-6">
-        <Link to="/" className="nav-link flex items-center space-x-3">
+        <Link to="/doctor/dashboard" className="nav-link flex items-center space-x-3">
           <Home className="sidebar-icon" />
           <span className={`${sidebarOpen ? 'inline' : 'hidden'}`}>Accueil</span>
         </Link>
